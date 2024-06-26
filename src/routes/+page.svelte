@@ -5,7 +5,8 @@
     async function fetchData() {
         const res = await fetch(`/api/get`);
         const json = await res.json();
-        return json.reverse();
+        return json;
+        // return json.reverse();
     }
 
     let data = [];
@@ -20,6 +21,12 @@
             <div>
                 <!-- <span>{d._id}</span> -->
                 <span>{d.answer}</span>
+                {#if d.radio}
+                    - <span>{d.radio}</span>
+                {/if}
+                {#if d.range}
+                    - <span>{d.range}</span>
+                {/if}
             </div>
         {/each}
     {/if}
@@ -29,6 +36,10 @@
 </section>
 
 <style>
+    :global(body) {
+        font-family: sans-serif;
+    }
+
     article {
         min-height: 100px;
         margin-bottom: 50px;

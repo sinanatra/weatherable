@@ -1,5 +1,8 @@
 <script>
     let text = "";
+    let range = 0;
+    let radio = 0;
+
     let message = "";
 
     const handleSubmit = async () => {
@@ -15,6 +18,8 @@
             },
             body: JSON.stringify({
                 answer: text,
+                radio,
+                range,
             }),
         });
 
@@ -35,12 +40,12 @@
     {#if message}
         <div class="message">
             <p>{message}</p>
-            <a href="/" target="_self"
-                >Check the latest entries and print it.</a
+            <a href="/" target="_self">Check the latest entries and print it.</a
             >
         </div>
     {:else}
-        <section>
+        <div>
+            <h2>Question?</h2>
             <textarea
                 name="answer"
                 id="answer"
@@ -48,10 +53,23 @@
                 maxlength="640"
                 required
             ></textarea>
-        </section>
-        <button on:click={handleSubmit}>Submit</button>
+        </div>
+        <div>
+            <h2>Question?</h2>
+            <input type="range" name="" id="" bind:value={range} />
+        </div>
+        <div>
+            <h2>Question?</h2>
+            <input type="radio" bind:group={radio} value={1} />1
+            <input type="radio" bind:group={radio} value={2} />2
+            <input type="radio" bind:group={radio} value={3} />3
+        </div>
     {/if}
 </section>
+<button on:click={handleSubmit}>Submit</button>
 
 <style>
+    section {
+        margin-bottom: 50px;
+    }
 </style>
