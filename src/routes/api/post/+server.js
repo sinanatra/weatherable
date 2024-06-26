@@ -4,7 +4,7 @@ export const POST = async ({ request }) => {
     try {
         const data = await request.json();
 
-        if (data.question && data.answer) {
+        if (data.answer) {
             const collection = await db.collection('weatherables');
             await collection.insertOne(data);
 
