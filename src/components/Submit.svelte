@@ -1,6 +1,7 @@
 <script>
     let text = "";
     let range = 0;
+    let range1 = 0;
     let radio = 0;
 
     let message = "";
@@ -20,6 +21,7 @@
                 answer: text,
                 radio,
                 range,
+                range1,
             }),
         });
 
@@ -60,16 +62,28 @@
         </div>
         <div>
             <h2>Question?</h2>
+            <input type="range" name="" id="" bind:value={range1} />
+        </div>
+        <div>
+            <h2>Question?</h2>
             <input type="radio" bind:group={radio} value={1} />1
             <input type="radio" bind:group={radio} value={2} />2
             <input type="radio" bind:group={radio} value={3} />3
         </div>
     {/if}
 </section>
-<button on:click={handleSubmit}>Submit</button>
+{#if !text || !radio || !range || !range1}
+    <button disabled>Submit</button>
+{:else}
+    <button on:click={handleSubmit}>Submit</button>
+{/if}
 
 <style>
     section {
         margin-bottom: 50px;
+    }
+
+    a {
+        color: white;
     }
 </style>

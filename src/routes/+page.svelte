@@ -1,9 +1,10 @@
 <script>
     import { onMount } from "svelte";
     import Submit from "@components/Submit.svelte";
+    import Viz from "@components/Viz.svelte";
 
     async function fetchData() {
-        const res = await fetch(`/api/get`);
+        const res = await fetch(`/api/last`);
         const json = await res.json();
         return json;
         // return json.reverse();
@@ -16,33 +17,37 @@
 </script>
 
 <article>
-    {#if data}
-        {#each data.slice(0, 10) as d}
+    <section class="form">
+        <Submit />
+    </section>
+    <section class="data">
+        {#if data.length > 0}
             <div>
-                <!-- <span>{d._id}</span> -->
-                <span>{d.answer}</span>
-                {#if d.radio}
-                    - <span>{d.radio}</span>
-                {/if}
-                {#if d.range}
-                    - <span>{d.range}</span>
-                {/if}
+                {#each data as d}
+                    <Viz data={d} />
+                {/each}
             </div>
-        {/each}
-    {/if}
+        {/if}
+    </section>
 </article>
-<section>
-    <Submit />
-</section>
+
 
 <style>
-    :global(body) {
-        font-family: sans-serif;
+    article {
+        display: flex;
+        gap: 20px;
+        height: 100%;
+        margin-top: 5px;
+        padding: 10px;
+    }
+    section {
+        flex: 1;
     }
 
-    article {
-        min-height: 100px;
-        margin-bottom: 50px;
-        border-bottom: 1px dashed;
+    .data > div {
+        border: 1px dashed;
+        padding: 10px;
+        width: 400px;
+        height: 400px;
     }
 </style>
