@@ -73,7 +73,7 @@
 
             s.stroke("red");
             s.beginShape();
-            for (var i = 0; i <= width; i++) {
+            for (let i = 0; i <= width; i++) {
                 angle = s.map(i, 0, width, 0, s.TAU);
                 y = s.sin(angle * freq + s.radians(phi));
                 y *= s.height / 2.5;
@@ -83,7 +83,7 @@
 
             s.stroke("blue");
             s.beginShape();
-            for (var i = 0; i <= width; i++) {
+            for (let i = 0; i <= width; i++) {
                 angle = s.map(i, 0, width, 0, s.TAU);
                 y = s.cos(angle * modFreq);
                 y *= s.height / 2.5;
@@ -95,10 +95,10 @@
             s.strokeWeight(2);
 
             s.beginShape();
-            for (var i = 0; i <= width; i++) {
+            for (let i = 0; i <= width; i++) {
                 angle = s.map(i, 0, width, 0, s.TAU);
-                var info = s.sin(angle * freq + s.radians(phi));
-                var carrier = s.cos(angle * modFreq);
+                let info = s.sin(angle * freq + s.radians(phi));
+                let carrier = s.cos(angle * modFreq);
                 y = info * carrier;
                 y *= s.height / 2.5;
                 s.vertex(i, y);
