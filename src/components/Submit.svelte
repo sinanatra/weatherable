@@ -133,6 +133,6 @@
     }
 
     a {
-        color: white;
+        color: black;
     }
 </style>
