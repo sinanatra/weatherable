@@ -11,8 +11,8 @@
 <style>
     :global(body) {
         font-family: sans-serif;
-        background-color: black;
-        color: white;
+        /* background-color: black;
+        color: white; */
         margin: 0;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;

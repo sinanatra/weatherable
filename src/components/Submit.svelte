@@ -1,10 +1,17 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+
     let text = "";
     let range = 0;
     let range1 = 0;
     let radio = 0;
-
     let message = "";
+
+    const dispatch = createEventDispatcher();
+
+    function handleChange() {
+        dispatch("change", { answer: text, radio, range, range1 });
+    }
 
     const handleSubmit = async () => {
         if (!text.trim()) {
@@ -42,7 +49,8 @@
     {#if message}
         <div class="message">
             <p>{message}</p>
-            <a href="/" target="_self">Check the latest entries and print it.</a
+            <a href="/last" target="_self"
+                >Check the latest entries and print it.</a
             >
         </div>
     {:else}
@@ -53,34 +61,75 @@
                 id="answer"
                 bind:value={text}
                 maxlength="640"
+                lines="4"
                 required
+                on:input={handleChange}
             ></textarea>
         </div>
         <div>
             <h2>Question?</h2>
-            <input type="range" name="" id="" bind:value={range} />
+            <input
+                type="range"
+                bind:value={range}
+                min="0"
+                max="1"
+                step="0.1"
+                on:input={handleChange}
+            />
         </div>
         <div>
             <h2>Question?</h2>
-            <input type="range" name="" id="" bind:value={range1} />
+            <input
+                type="range"
+                bind:value={range1}
+                min="0"
+                max="1"
+                step="0.1"
+                on:input={handleChange}
+            />
         </div>
         <div>
             <h2>Question?</h2>
-            <input type="radio" bind:group={radio} value={1} />1
-            <input type="radio" bind:group={radio} value={2} />2
-            <input type="radio" bind:group={radio} value={3} />3
+            <input
+                type="radio"
+                bind:group={radio}
+                value={1}
+                on:change={handleChange}
+            />1
+            <input
+                type="radio"
+                bind:group={radio}
+                value={2}
+                on:change={handleChange}
+            />2
+            <input
+                type="radio"
+                bind:group={radio}
+                value={3}
+                on:change={handleChange}
+            />3
         </div>
     {/if}
 </section>
-{#if !text || !radio || !range || !range1}
-    <button disabled>Submit</button>
-{:else}
-    <button on:click={handleSubmit}>Submit</button>
+
+{#if !message}
+    {#if !text || !radio}
+        <button disabled>Submit</button>
+    {:else}
+        <button on:click={handleSubmit}>Submit</button>
+    {/if}
 {/if}
 
 <style>
     section {
         margin-bottom: 50px;
+        width: 100%;
+    }
+
+    textarea,
+    input[type="range"] {
+        width: 100%;
+        max-width: 340px;
     }
 
     a {
