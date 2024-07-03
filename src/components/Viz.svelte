@@ -1,17 +1,15 @@
 <script>
-    import { onMount, onDestroy } from "svelte";
+    import { onMount } from "svelte";
     import * as d3 from "d3";
 
     export let data;
     export let guessedData;
 
-    data = data.slice(0, 50);
-
     let canvas;
     let context;
     let width = 800;
     let height = 200;
-    let margin = { top: 30, right: 10, bottom: 0, left: 10 };
+    let margin = { top: 40, right: 10, bottom: 20, left: 10 };
 
     onMount(() => {
         context = canvas.getContext("2d");
@@ -26,27 +24,49 @@
 
             context.scale(window.devicePixelRatio, window.devicePixelRatio);
         }
+    });
+
+    $: if (context && guessedData) {
+        drawVisualization();
+    }
+
+    function drawVisualization() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        let diff = mapValue(guessedData.len, 0, 1, data.length - 1, 5);
 
         if (guessedData.outline) {
-            for (let i = 3; i < Math.ceil(data.length / 3); i++) {
-                let slicedData = data.slice(0, i);
-                tribalVis(slicedData, "temp");
-                tribalVis(slicedData, "baromabs");
-                tribalVis(slicedData, "feelslike");
-                tribalVis(slicedData, "windspeed");
-                tribalVis(slicedData, "humidity");
-            }
-        } else {
-            for (let i = 3; i < data.length; i++) {
-                let slicedData = data.slice(0, i);
-                tribalVis(slicedData, "temp");
-                tribalVis(slicedData, "baromabs");
-                tribalVis(slicedData, "feelslike");
-                tribalVis(slicedData, "windspeed");
-                tribalVis(slicedData, "humidity");
-            }
+            diff = mapValue(guessedData.len, 0, 5, data.length, 5);
         }
-    });
+
+        for (let i = diff; i < data.length; i++) {
+            let slicedData = data.slice(0, i);
+            tribalVis(slicedData, "temp");
+            tribalVis(slicedData, "baromabs");
+            tribalVis(slicedData, "feelslike");
+            tribalVis(slicedData, "windspeed");
+            tribalVis(slicedData, "humidity");
+        }
+        // if (guessedData.outline) {
+        //     for (let i = diff; i < Math.ceil(data.length / 3 ); i++) {
+        //         let slicedData = data.slice(0, i);
+        //         tribalVis(slicedData, "temp");
+        //         tribalVis(slicedData, "baromabs");
+        //         tribalVis(slicedData, "feelslike");
+        //         tribalVis(slicedData, "windspeed");
+        //         tribalVis(slicedData, "humidity");
+        //     }
+        // } else {
+        //     for (let i = diff; i < data.length; i++) {
+        //         let slicedData = data.slice(0, i);
+        //         tribalVis(slicedData, "temp");
+        //         tribalVis(slicedData, "baromabs");
+        //         tribalVis(slicedData, "feelslike");
+        //         tribalVis(slicedData, "windspeed");
+        //         tribalVis(slicedData, "humidity");
+        //     }
+        // }
+    }
 
     function tribalVis(data, dim) {
         let yExtent = d3.extent(data, (d) => +d[dim]);
@@ -74,7 +94,7 @@
             .y1((d, i) => {
                 if (i !== 0 && i !== data.length - 1) {
                     return yScale(
-                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.2,
+                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.1,
                     );
                 } else {
                     return yScale(d[dim]);
@@ -91,7 +111,7 @@
         if (guessedData.outline) {
             context.beginPath();
             area(data);
-            context.lineWidth = 0.5;
+            context.lineWidth = 1;
             context.strokeStyle = "black";
             context.stroke();
             context.fillStyle = "rgba(255,255,255,0)";
@@ -105,6 +125,10 @@
             context.fillStyle = "black";
             context.fill();
         }
+    }
+
+    function mapValue(value, inMin, inMax, outMin, outMax) {
+        return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
     }
 </script>
 

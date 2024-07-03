@@ -58,9 +58,7 @@
 
 {#if message}
     <div class="message">
-        <p>{message}</p>
-        <a href="/last" target="_self">Check the latest entries and print it.</a
-        >
+        <a href="/last" target="_self">Check the latest tattoo.</a>
     </div>
 {:else}
     <section>
@@ -82,7 +80,7 @@
             <input
                 type="range"
                 bind:value={range}
-                min="0"
+                min="0.1"
                 max="1"
                 step="0.1"
                 on:input={handleChange}
@@ -93,7 +91,7 @@
             <input
                 type="range"
                 bind:value={range1}
-                min="0"
+                min="0.1"
                 max="1"
                 step="0.1"
                 on:input={handleChange}
@@ -105,7 +103,7 @@
             <input
                 type="range"
                 bind:value={range2}
-                min="0"
+                min="0.1"
                 max="1"
                 step="0.1"
                 on:input={handleChange}
@@ -117,7 +115,7 @@
             <input
                 type="range"
                 bind:value={range3}
-                min="0"
+                min="0.1"
                 max="1"
                 step="0.1"
                 on:input={handleChange}
@@ -129,7 +127,7 @@
             <input
                 type="range"
                 bind:value={range4}
-                min="0"
+                min="0.1"
                 max="1"
                 step="0.1"
                 on:input={handleChange}
@@ -141,7 +139,7 @@
             <input
                 type="range"
                 bind:value={range5}
-                min="0"
+                min="0.1"
                 max="1"
                 step="0.1"
                 on:input={handleChange}
@@ -216,7 +214,7 @@
 
     h2 {
         font-size: 1.5em;
-        transform: scaleY(1.5);
+        transform: scaleY(1.2);
         transform-origin: bottom;
         margin-bottom: 30px;
     }
