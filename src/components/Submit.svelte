@@ -1,6 +1,5 @@
 <script>
     import { createEventDispatcher } from "svelte";
-    import { redirect } from "@sveltejs/kit";
     import { goto } from "$app/navigation";
 
     export let currentInput;
@@ -50,7 +49,6 @@
         if (success) {
             console.log("Data submitted successfully.");
             goto(`/last`);
-            // throw redirect(303, "/last");
         } else {
             console.error("Failed to submit data.");
         }
