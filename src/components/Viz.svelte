@@ -1,121 +1,117 @@
 <script>
-    import P5 from "p5-svelte";
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
+    import * as d3 from "d3";
 
     export let data;
+    export let guessedData;
 
-    let width, height;
-    let angle;
-    let y;
-    let weather = [];
-    // let nodes = [];
-    let maxValues = [];
-    let nr = 0;
-    let params = [];
+    data = data.slice(0, 50);
 
-    onMount(async () => {
-        const response = await fetch(
-            "https://zku-middleware.vercel.app/api/weather",
-        );
-        weather = await response.json();
-        params = Object.keys(weather[0]).filter(
-            (key) => typeof weather[0][key] === "number",
-        );
-        maxValues = params.map((param) => getMaxValue(param));
+    let canvas;
+    let context;
+    let width = 800;
+    let height = 200;
+    let margin = { top: 30, right: 10, bottom: 0, left: 10 };
+
+    onMount(() => {
+        context = canvas.getContext("2d");
+        if (window.devicePixelRatio > 1) {
+            var canvasWidth = canvas.width;
+            var canvasHeight = canvas.height;
+
+            canvas.width = canvasWidth * window.devicePixelRatio;
+            canvas.height = canvasHeight * window.devicePixelRatio;
+            canvas.style.width = canvasWidth + "px";
+            canvas.style.height = canvasHeight + "px";
+
+            context.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        if (guessedData.outline) {
+            for (let i = 3; i < Math.ceil(data.length / 3); i++) {
+                let slicedData = data.slice(0, i);
+                tribalVis(slicedData, "temp");
+                tribalVis(slicedData, "baromabs");
+                tribalVis(slicedData, "feelslike");
+                tribalVis(slicedData, "windspeed");
+                tribalVis(slicedData, "humidity");
+            }
+        } else {
+            for (let i = 3; i < data.length; i++) {
+                let slicedData = data.slice(0, i);
+                tribalVis(slicedData, "temp");
+                tribalVis(slicedData, "baromabs");
+                tribalVis(slicedData, "feelslike");
+                tribalVis(slicedData, "windspeed");
+                tribalVis(slicedData, "humidity");
+            }
+        }
     });
 
-    function getMaxValue(param) {
-        return Math.max(...weather.map((d) => d[param]));
+    function tribalVis(data, dim) {
+        let yExtent = d3.extent(data, (d) => +d[dim]);
+
+        if (yExtent[0] === yExtent[1]) {
+            return;
+        } else {
+            yExtent[0] = +yExtent[0] - +guessedData[dim];
+        }
+
+        const xScale = d3
+            .scaleLinear()
+            .domain([0, data.length - 1])
+            .range([margin.left, width - margin.right]);
+
+        const yScale = d3
+            .scaleLinear()
+            .domain(yExtent)
+            .range([height - margin.bottom, margin.top]);
+
+        const area = d3
+            .area()
+            .x((d, i) => xScale(i))
+            .y0((d) => yScale(d[dim]))
+            .y1((d, i) => {
+                if (i !== 0 && i !== data.length - 1) {
+                    return yScale(
+                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.2,
+                    );
+                } else {
+                    return yScale(d[dim]);
+                }
+            })
+            .context(context);
+
+        if (guessedData.curveSmooth) {
+            area.curve(d3.curveBasis);
+        } else {
+            area.curve(d3.curveBumpY);
+        }
+
+        if (guessedData.outline) {
+            context.beginPath();
+            area(data);
+            context.lineWidth = 0.5;
+            context.strokeStyle = "black";
+            context.stroke();
+            context.fillStyle = "rgba(255,255,255,0)";
+            context.fill();
+        } else {
+            context.beginPath();
+            area(data);
+            context.lineWidth = 2;
+            context.strokeStyle = "white";
+            context.stroke();
+            context.fillStyle = "black";
+            context.fill();
+        }
     }
-
-    const sketch = (s) => {
-        s.setup = () => {
-            s.createCanvas(width, height);
-            // s.colorMode(s.HSL);
-            s.strokeCap(s.SQUARE);
-        };
-
-        s.draw = () => {
-            if (!weather.length) return;
-            const record = weather[0];
-            let test = [params[nr]];
-
-            let framecheck = s.frameCount % 60;
-            if (framecheck == 0) {
-                nr = Math.floor(Math.random() * params.length) % height;
-            }
-
-            s.background(255);
-
-            s.fill(0);
-            s.noStroke();
-            let text = data.answer + " " + record.time.split("T")[0];
-            s.textSize(24);
-            s.textAlign("center");
-            s.text(text, width / 2, 20);
-            s.noFill();
-
-            s.strokeWeight(1);
-
-            let normalizedValue = s.map(
-                record[test], //param
-                0,
-                maxValues[nr],
-                10,
-                width,
-            );
-
-            const freq = s.map(data.range, 0, 1, 0, 10) + normalizedValue;
-            const phi = s.map(data.range1, 0, 1, 0, 50) + normalizedValue;
-            const modFreq = s.map(data.radio, 1, 3, 10, 200) + normalizedValue;
-
-            s.translate(0, height / 2);
-
-            s.stroke("red");
-            s.beginShape();
-            for (let i = 0; i <= width; i++) {
-                angle = s.map(i, 0, width, 0, s.TAU);
-                y = s.sin(angle * freq + s.radians(phi));
-                y *= s.height / 2.5;
-                s.vertex(i, y);
-            }
-            s.endShape();
-
-            s.stroke("blue");
-            s.beginShape();
-            for (let i = 0; i <= width; i++) {
-                angle = s.map(i, 0, width, 0, s.TAU);
-                y = s.cos(angle * modFreq);
-                y *= s.height / 2.5;
-                s.vertex(i, y);
-            }
-            s.endShape();
-
-            s.stroke(0);
-            s.strokeWeight(2);
-
-            s.beginShape();
-            for (let i = 0; i <= width; i++) {
-                angle = s.map(i, 0, width, 0, s.TAU);
-                let info = s.sin(angle * freq + s.radians(phi));
-                let carrier = s.cos(angle * modFreq);
-                y = info * carrier;
-                y *= s.height / 2.5;
-                s.vertex(i, y);
-            }
-            s.endShape();
-
-        };
-    };
 </script>
 
-<article bind:clientWidth={width} bind:clientHeight={height}>
-    <P5 {sketch} />
-</article>
+<canvas bind:this={canvas} width="800" height="200"></canvas>
 
 <style>
-    article {
-        display: flex;
-        height: 100%;
+    canvas {
+        background-color: white;
     }
 </style>
