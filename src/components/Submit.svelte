@@ -1,18 +1,19 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { redirect } from "@sveltejs/kit";
+    import { goto } from "$app/navigation";
 
     export let currentInput;
 
     $: text = currentInput?.answer ? currentInput.answer : "";
-    $: range = currentInput?.range ? currentInput.range : 0;
-    $: range1 = currentInput?.range1 ? currentInput.range1 : 0;
-    $: range2 = currentInput?.range2 ? currentInput.range2 : 0;
-    $: range3 = currentInput?.range3 ? currentInput.range3 : 0;
-    $: range4 = currentInput?.range4 ? currentInput.range4 : 0;
-    $: range5 = currentInput?.range5 ? currentInput.range5 : 0;
+    $: range = currentInput?.range ? currentInput.range : 0.1;
+    $: range1 = currentInput?.range1 ? currentInput.range1 : 0.1;
+    $: range2 = currentInput?.range2 ? currentInput.range2 : 0.1;
+    $: range3 = currentInput?.range3 ? currentInput.range3 : 0.1;
+    $: range4 = currentInput?.range4 ? currentInput.range4 : 0.1;
+    $: range5 = currentInput?.range5 ? currentInput.range5 : 0.1;
 
-    $: radio = currentInput?.radio ? currentInput.radio : 0;
-    let message = "";
+    $: radio = currentInput?.radio ? currentInput.radio : 0.1;
 
     const dispatch = createEventDispatcher();
 
@@ -48,153 +49,144 @@
 
         if (success) {
             console.log("Data submitted successfully.");
-            message = "Data submitted successfully.";
+            goto(`/last`);
+            // throw redirect(303, "/last");
         } else {
             console.error("Failed to submit data.");
-            message = "Failed to submit data.";
         }
     };
 </script>
 
-{#if message}
-    <div class="message">
-        <a href="/last" target="_self">Check the latest tattoo.</a>
+<section>
+    <div class="input-group">
+        <h2>How could you describe the current weather in one sentence?</h2>
+        <textarea
+            name="answer"
+            id="answer"
+            bind:value={text}
+            maxlength="640"
+            lines="4"
+            required
+            on:input={handleChange}
+        ></textarea>
     </div>
+
+    <div class="input-group">
+        <h2>How much rain has fallen in the past day?</h2>
+        <input
+            type="range"
+            bind:value={range}
+            min="0.1"
+            max="1"
+            step="0.1"
+            on:input={handleChange}
+        />
+    </div>
+    <div class="input-group">
+        <h2>How humid is today?</h2>
+        <input
+            type="range"
+            bind:value={range1}
+            min="0.1"
+            max="1"
+            step="0.1"
+            on:input={handleChange}
+        />
+    </div>
+
+    <div class="input-group">
+        <h2>How hot is today?</h2>
+        <input
+            type="range"
+            bind:value={range2}
+            min="0.1"
+            max="1"
+            step="0.1"
+            on:input={handleChange}
+        />
+    </div>
+
+    <div class="input-group">
+        <h2>How fast is the wind at the current moment?</h2>
+        <input
+            type="range"
+            bind:value={range3}
+            min="0.1"
+            max="1"
+            step="0.1"
+            on:input={handleChange}
+        />
+    </div>
+
+    <div class="input-group">
+        <h2>BAROM?</h2>
+        <input
+            type="range"
+            bind:value={range4}
+            min="0.1"
+            max="1"
+            step="0.1"
+            on:input={handleChange}
+        />
+    </div>
+
+    <div class="input-group">
+        <h2>feelslike?</h2>
+        <input
+            type="range"
+            bind:value={range5}
+            min="0.1"
+            max="1"
+            step="0.1"
+            on:input={handleChange}
+        />
+    </div>
+
+    <div class="input-group">
+        <h2>In which Direction is the wind blowing?</h2>
+        <label>
+            <input
+                type="radio"
+                bind:group={radio}
+                value={"N"}
+                on:change={handleChange}
+            />
+            N
+        </label>
+        <label>
+            <input
+                type="radio"
+                bind:group={radio}
+                value={"E"}
+                on:change={handleChange}
+            />
+            E
+        </label>
+        <label>
+            <input
+                type="radio"
+                bind:group={radio}
+                value={"S"}
+                on:change={handleChange}
+            />
+            S
+        </label>
+        <label>
+            <input
+                type="radio"
+                bind:group={radio}
+                value={"W"}
+                on:change={handleChange}
+            />
+            W
+        </label>
+    </div>
+</section>
+
+{#if !text || !radio}
+    <button disabled>Submit</button>
 {:else}
-    <section>
-        <div class="input-group">
-            <h2>How could you describe the current weather in one sentence?</h2>
-            <textarea
-                name="answer"
-                id="answer"
-                bind:value={text}
-                maxlength="640"
-                lines="4"
-                required
-                on:input={handleChange}
-            ></textarea>
-        </div>
-
-        <div class="input-group">
-            <h2>How much rain has fallen in the past day?</h2>
-            <input
-                type="range"
-                bind:value={range}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />
-        </div>
-        <div class="input-group">
-            <h2>How humid is today?</h2>
-            <input
-                type="range"
-                bind:value={range1}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />
-        </div>
-
-        <div class="input-group">
-            <h2>How hot is today?</h2>
-            <input
-                type="range"
-                bind:value={range2}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />
-        </div>
-
-        <div class="input-group">
-            <h2>How fast is the wind at the current moment?</h2>
-            <input
-                type="range"
-                bind:value={range3}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />
-        </div>
-
-        <div class="input-group">
-            <h2>BAROM?</h2>
-            <input
-                type="range"
-                bind:value={range4}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />
-        </div>
-
-        <div class="input-group">
-            <h2>feelslike?</h2>
-            <input
-                type="range"
-                bind:value={range5}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />
-        </div>
-
-       
-        <div class="input-group">
-            <h2>In which Direction is the wind blowing?</h2>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio}
-                    value={"N"}
-                    on:change={handleChange}
-                />
-                N
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio}
-                    value={"E"}
-                    on:change={handleChange}
-                />
-                E
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio}
-                    value={"S"}
-                    on:change={handleChange}
-                />
-                S
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio}
-                    value={"W"}
-                    on:change={handleChange}
-                />
-                W
-            </label>
-        </div>
-    </section>
-{/if}
-
-{#if !message}
-    {#if !text || !radio}
-        <button disabled>Submit</button>
-    {:else}
-        <button on:click={handleSubmit}>Submit</button>
-    {/if}
+    <button on:click={handleSubmit}>Submit</button>
 {/if}
 
 <style>
