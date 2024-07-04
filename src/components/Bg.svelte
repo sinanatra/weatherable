@@ -16,27 +16,14 @@
             this.y = ~~y;
             this.r = 0;
             this.d = this.r / 2;
-            // this.xVel = ~~(Math.random() * 20);
             this.xVel = 0; // Horizontal velocity set to 0
-            this.yVel = ~~(Math.random() * 10);
+            this.yVel = 5; // Vertical velocity
         }
 
         move() {
-            const d = this.d;
-            const xVel = this.xVel;
-            const yVel = this.yVel;
-
-            // if (this.x + d + xVel >= W || this.x - d + xVel <= 0) {
-            //     this.xVel = -xVel;
-            //     this.x += -xVel;
-            // } else {
-            //     this.x += xVel;
-            // }
-            if (this.y + d + yVel >= H || this.y - d + yVel <= 0) {
-                this.yVel = -yVel;
-                this.y += -yVel;
-            } else {
-                this.y += yVel;
+            this.y += this.yVel;
+            if (this.y - this.d >= H) {
+                this.y = -this.d; // Reappear from the top
             }
         }
     }
@@ -65,7 +52,7 @@
                 const desiredX = hx - x;
                 const desiredY = hy - y;
                 const d = PY(desiredX, desiredY);
-                const homeForce = d * 0.03;
+                const homeForce = d * 0.05;
                 const homeAngle = Math.atan2(desiredY, desiredX);
                 hvx = homeForce * Math.cos(homeAngle);
                 hvy = homeForce * Math.sin(homeAngle);
@@ -201,7 +188,7 @@
             }
         }
         // Initialize with N pushers
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 20; i++) {
             pushers.push(new Pusher(Math.random() * W, Math.random() * H));
         }
         timer();
