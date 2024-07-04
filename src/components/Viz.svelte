@@ -8,8 +8,9 @@
     let canvas;
     let context;
     let width = 800;
-    let height = 200;
-    let margin = { top: 40, right: 10, bottom: 20, left: 10 };
+    let height = 150;
+
+    let margin = { top: 20, right: 10, bottom: 0, left: 10 };
 
     onMount(() => {
         context = canvas.getContext("2d");
@@ -124,7 +125,7 @@
     }
 </script>
 
-<canvas bind:this={canvas} width="800" height="200"></canvas>
+<canvas bind:this={canvas} {width} {height}></canvas>
 
 <style>
     canvas {
