@@ -17,7 +17,17 @@
     const dispatch = createEventDispatcher();
 
     function handleChange() {
+        updateRangeBackgrounds();
         dispatch("change", { answer: text, radio, range, range1 });
+    }
+
+    function updateRangeBackgrounds() {
+        const ranges = document.querySelectorAll('input[type="range"]');
+        ranges.forEach((range) => {
+            const value =
+                ((range.value - range.min) / (range.max - range.min)) * 100;
+            range.style.background = `linear-gradient(to right, white 0%, white ${value}%, #565656 ${value}%, #565656 100%)`;
+        });
     }
 
     const handleSubmit = async () => {
@@ -53,6 +63,9 @@
             console.error("Failed to submit data.");
         }
     };
+
+    // Initial update on load
+    updateRangeBackgrounds();
 </script>
 
 <section>
@@ -180,7 +193,6 @@
         </label>
     </div>
 </section>
-
 {#if !text || !radio}
     <button disabled>Submit</button>
 {:else}
@@ -212,13 +224,13 @@
     textarea,
     input[type="range"] {
         width: 100%;
-        height: 350px;
         font-size: 1em;
         resize: none;
         font-family: sans-serif;
     }
 
     textarea {
+        height: 350px;
         background: none;
         box-shadow: none;
         border: 1px solid #565656;

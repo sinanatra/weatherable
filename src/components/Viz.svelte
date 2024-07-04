@@ -39,33 +39,25 @@
             diff = mapValue(guessedData.len, 0, 5, data.length, 5);
         }
 
+        let fullData = [];
+
         for (let i = diff; i < data.length; i++) {
             let slicedData = data.slice(0, i);
-            tribalVis(slicedData, "temp");
-            tribalVis(slicedData, "baromabs");
-            tribalVis(slicedData, "feelslike");
-            tribalVis(slicedData, "windspeed");
-            tribalVis(slicedData, "humidity");
+            if (guessedData.mirror) {
+                fullData = [...slicedData, ...mirrorData(slicedData)];
+            } else {
+                fullData = slicedData;
+            }
+            tribalVis(fullData, "temp");
+            tribalVis(fullData, "baromabs");
+            tribalVis(fullData, "feelslike");
+            tribalVis(fullData, "windspeed");
+            tribalVis(fullData, "humidity");
         }
-        // if (guessedData.outline) {
-        //     for (let i = diff; i < Math.ceil(data.length / 3 ); i++) {
-        //         let slicedData = data.slice(0, i);
-        //         tribalVis(slicedData, "temp");
-        //         tribalVis(slicedData, "baromabs");
-        //         tribalVis(slicedData, "feelslike");
-        //         tribalVis(slicedData, "windspeed");
-        //         tribalVis(slicedData, "humidity");
-        //     }
-        // } else {
-        //     for (let i = diff; i < data.length; i++) {
-        //         let slicedData = data.slice(0, i);
-        //         tribalVis(slicedData, "temp");
-        //         tribalVis(slicedData, "baromabs");
-        //         tribalVis(slicedData, "feelslike");
-        //         tribalVis(slicedData, "windspeed");
-        //         tribalVis(slicedData, "humidity");
-        //     }
-        // }
+    }
+
+    function mirrorData(data) {
+        return data.slice(1, -1).reverse();
     }
 
     function tribalVis(data, dim) {

@@ -13,7 +13,7 @@
             "https://zku-middleware.vercel.app/api/recent",
         );
         const json = await response.json();
-        return json; //.slice(0, 10);
+        return json; //.slice(0, json.length / 2);
     }
 
     let data = [];
@@ -29,8 +29,13 @@
         humidity: guessed[0]?.range4,
 
         len: guessed[0]?.range5,
-        curveSmooth: true ? (guessed[0]?.radio == "N" || guessed[0]?.radio == "S") : false,
-        outline:  true ? (guessed[0]?.radio == "E" || guessed[0]?.radio == "W") : false,
+        curveSmooth: true
+            ? guessed[0]?.radio == "N" || guessed[0]?.radio == "S"
+            : false,
+        outline: true
+            ? guessed[0]?.radio == "E" || guessed[0]?.radio == "W"
+            : false,
+        mirror: true,
     };
 
     // $: guessedData = {
@@ -154,6 +159,14 @@
                     type="checkbox"
                     checked={guessedData.outline}
                     on:change={(e) => (guessedData.outline = e.target.checked)}
+                />
+            </label>
+            <label>
+                Mirror:
+                <input
+                    type="checkbox"
+                    checked={guessedData.mirror}
+                    on:change={(e) => (guessedData.mirror = e.target.checked)}
                 />
             </label>
         </section>

@@ -12,11 +12,11 @@
             Helvetica,
             sans-serif;
         background-color: black;
-        color: white;
+        color: rgba(255, 255, 255, 0.5);
         margin: 0;
-        font-size: 90px;
+        font-size: 6vw;
         line-height: 1.2em;
-       
+
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-font-smoothing: antialiased;
