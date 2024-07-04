@@ -86,7 +86,7 @@
             .y1((d, i) => {
                 if (i !== 0 && i !== data.length - 1) {
                     return yScale(
-                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.1,
+                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.05,
                     );
                 } else {
                     return yScale(d[dim]);
