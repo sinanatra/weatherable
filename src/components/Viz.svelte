@@ -7,8 +7,8 @@
 
     let canvas;
     let context;
-    let width = 800;
-    let height = 150;
+    let width = 1063;
+    let height = 354;
 
     let margin = { top: 20, right: 10, bottom: 0, left: 10 };
 
