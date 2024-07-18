@@ -31,28 +31,40 @@
         len: guessed[0]?.range1, //fix
 
         curveSmooth: true
-            ? guessed[0]?.radio == "NW" || guessed[0]?.radio == "NE"
+            ? guessed[0]?.radio1 == "NW" || guessed[0]?.radio1 == "NE"
             : false,
 
         outline: true
-            ? guessed[0]?.radio == "SW" || guessed[0]?.radio == "SE"
+            ? guessed[0]?.radio1 == "SW" || guessed[0]?.radio1 == "SE"
             : false,
         mirror: true
-            ? guessed[0]?.radio1 == "Yes" || guessed[0]?.radio1 == "No"
+            ? guessed[0]?.radio == "Yes" || guessed[0]?.radio == "No"
             : false,
     };
-    $: openhaus =
-        guessedData?.outline == true
-            ? "1"
-            : guessedData?.mirror == true
-              ? "2"
-              : guessedData?.curveSmooth == false
-                ? "3"
-                : guessedData?.mirror == false
-                  ? "4"
-                  : "KA";
 
-    $: console.log(guessedData);
+    $: openhaus =
+        guessed[0]?.radio1 == "SW"
+            ? "1"
+            : guessed[0]?.radio1 == "SE"
+              ? "2"
+              : guessed[0]?.radio1 == "NW"
+                ? "3"
+                : guessed[0]?.radio1 == "NE"
+                  ? "4"
+                  : "?";
+
+    // $: openhaus =
+    //     guessedData?.outline == true
+    //         ? "1"
+    //         : guessedData?.mirror == true
+    //           ? "2"
+    //           : guessedData?.curveSmooth == false
+    //             ? "3"
+    //             : guessedData?.mirror == false
+    //               ? "4"
+    //               : "?";
+
+    // $: console.log(guessedData);
 
     // $: guessedData = {
     //     temp: 0.4,

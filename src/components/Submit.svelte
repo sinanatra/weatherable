@@ -12,8 +12,8 @@
     $: range4 = currentInput?.range4 ? currentInput.range4 : 0.1;
     // $: range5 = currentInput?.range5 ? currentInput.range5 : 0.1;
 
-    $: radio = currentInput?.radio ? currentInput.radio : "NW";
-    $: radio1 = currentInput?.radio1 ? currentInput.radio1 : "yes";
+    $: radio = currentInput?.radio ? currentInput.radio : "yes";
+    $: radio1 = currentInput?.radio1 ? currentInput.radio1 : "NW";
 
     const dispatch = createEventDispatcher();
 
