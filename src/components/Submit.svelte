@@ -72,7 +72,7 @@
     </div>
 
     <div class="input-group">
-        <h2>How warm does it feel like outside at the moment?</h2>
+        <h2>How warm is it outside right now?</h2>
         <input
             type="range"
             bind:value={range}
