@@ -27,7 +27,7 @@
         wrain_piezo: guessed[0]?.range2,
         humidity: guessed[0]?.range3,
         windspeed: guessed[0]?.range4,
-      
+
         len: guessed[0]?.range1, //fix
 
         curveSmooth: true
@@ -44,9 +44,9 @@
     $: openhaus =
         guessedData?.outline == true
             ? "1"
-            : guessedData?.curveSmooth == true
+            : guessedData?.mirror == true
               ? "2"
-              : guessedData?.mirror == true
+              : guessedData?.curveSmooth == false
                 ? "3"
                 : guessedData?.mirror == false
                   ? "4"
@@ -75,18 +75,20 @@
 </script>
 
 <article>
-    {#if guessed.length > 0}
-        <section class="data">
+    <div>
+        {#if guessed.length > 0}
+            <!-- <section class="data">
             {#if data.length > 0}
                 <div>
                     <Viz {data} {guessedData} />
                 </div>
             {/if}
-        </section>
+        </section> -->
 
-        <h1>{openhaus}</h1>
+            <p>Reach a tattoo operator with the current number:</p>
+            <h1>{openhaus}</h1>
 
-        <section class="controls">
+            <!-- <section class="controls">
             <label>
                 Temp:
                 <input
@@ -187,16 +189,29 @@
                     on:change={(e) => (guessedData.mirror = e.target.checked)}
                 />
             </label>
-        </section>
-    {/if}
+        </section> -->
+        {/if}
+    </div>
 </article>
 
 <style>
     article {
-        height: 100vh;
-        padding: 40px;
+        /* height: 100vh; */
         font-size: 18px;
         color: white;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        align-content: space-around;
+        justify-content: center;
+    }
+
+    div,
+    h1 {
+        color: aliceblue;
+        align-items: center;
+        text-align: center;
+        text-shadow: unset;
     }
 
     label {
@@ -206,7 +221,15 @@
         line-height: 18px;
     }
 
+    p {
+        display: block;
+        font-size: 2vw;
+        align-items: center;
+    }
+
     h1 {
-        font-size: 6vw;
+        display: block;
+        font-size: 20vw;
+        align-items: center;
     }
 </style>
