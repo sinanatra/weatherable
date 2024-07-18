@@ -100,6 +100,10 @@
             <p>Reach a tattoo operator with the current number:</p>
             <h1>{openhaus}</h1>
 
+            <p class="again">
+                <a href="/">Start again</a>
+            </p>
+
             <!-- <section class="controls">
             <label>
                 Temp:
@@ -239,6 +243,12 @@
         align-items: center;
     }
 
+    .again {
+        margin-top: 500px;
+    }
+    a {
+        color: whitesmoke;
+    }
     h1 {
         display: block;
         font-size: 20vw;
