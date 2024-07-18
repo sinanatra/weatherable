@@ -57,7 +57,7 @@
     };
 </script>
 
-<p>Please fill in the questionnaire to get your personal ZK/U weather tattoo</p>
+<p>Please scroll down and fill in the questionnaire to get your personal ZK/U weather tattoo</p>
 <section>
     <div class="input-group">
         <h2>Which mood do you associate with the weather today?</h2>
