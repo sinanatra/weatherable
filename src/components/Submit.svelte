@@ -245,7 +245,7 @@
 
     textarea,
     input[type="range"] {
-        width: 80%;
+        width: 90%;
         height: 350px;
         font-size: 1em;
         resize: none;
