@@ -10,9 +10,10 @@
     $: range2 = currentInput?.range2 ? currentInput.range2 : 0.1;
     $: range3 = currentInput?.range3 ? currentInput.range3 : 0.1;
     $: range4 = currentInput?.range4 ? currentInput.range4 : 0.1;
-    $: range5 = currentInput?.range5 ? currentInput.range5 : 0.1;
+    // $: range5 = currentInput?.range5 ? currentInput.range5 : 0.1;
 
-    $: radio = currentInput?.radio ? currentInput.radio : 0.1;
+    $: radio = currentInput?.radio ? currentInput.radio : "NW";
+    $: radio1 = currentInput?.radio1 ? currentInput.radio1 : "yes";
 
     const dispatch = createEventDispatcher();
 
@@ -34,12 +35,13 @@
             body: JSON.stringify({
                 answer: text,
                 radio,
+                radio1,
                 range,
                 range1,
                 range2,
                 range3,
                 range4,
-                range5,
+                // range5,
             }),
         });
 
@@ -48,7 +50,7 @@
 
         if (success) {
             console.log("Data submitted successfully.");
-            goto(`/last`);
+            goto(`/haus`);
         } else {
             console.error("Failed to submit data.");
         }
@@ -70,7 +72,7 @@
     </div>
 
     <div class="input-group">
-        <h2>How much rain has fallen in the past day?</h2>
+        <h2>How warm does it feel like outside at the moment?</h2>
         <input
             type="range"
             bind:value={range}
@@ -80,8 +82,9 @@
             on:input={handleChange}
         />
     </div>
+
     <div class="input-group">
-        <h2>How humid is today?</h2>
+        <h2>What is today's UV factor?</h2>
         <input
             type="range"
             bind:value={range1}
@@ -91,9 +94,8 @@
             on:input={handleChange}
         />
     </div>
-
     <div class="input-group">
-        <h2>How hot is today?</h2>
+        <h2>How much rain has fallen in the past week?</h2>
         <input
             type="range"
             bind:value={range2}
@@ -105,7 +107,7 @@
     </div>
 
     <div class="input-group">
-        <h2>How fast is the wind at the current moment?</h2>
+        <h2>How humid is it today?</h2>
         <input
             type="range"
             bind:value={range3}
@@ -117,7 +119,7 @@
     </div>
 
     <div class="input-group">
-        <h2>BAROM?</h2>
+        <h2>What was the average wind speed this week? </h2>
         <input
             type="range"
             bind:value={range4}
@@ -129,54 +131,63 @@
     </div>
 
     <div class="input-group">
-        <h2>feelslike?</h2>
-        <input
-            type="range"
-            bind:value={range5}
-            min="0.1"
-            max="1"
-            step="0.1"
-            on:input={handleChange}
-        />
+        <h2>Were you checking today's weather forecast?</h2>
+        <label>
+            <input
+                type="radio"
+                bind:group={radio}
+                value={"Yes"}
+                on:change={handleChange}
+            />
+            Yes
+        </label>
+        <label>
+            <input
+                type="radio"
+                bind:group={radio}
+                value={"No"}
+                on:change={handleChange}
+            />
+            No
+        </label>
     </div>
-
     <div class="input-group">
-        <h2>In which Direction is the wind blowing?</h2>
+        <h2>In which direction is the wind blowing?</h2>
         <label>
             <input
                 type="radio"
                 bind:group={radio}
-                value={"N"}
+                value={"NW"}
                 on:change={handleChange}
             />
-            N
+            NW
         </label>
         <label>
             <input
                 type="radio"
                 bind:group={radio}
-                value={"E"}
+                value={"NE"}
                 on:change={handleChange}
             />
-            E
+            NE
         </label>
         <label>
             <input
                 type="radio"
                 bind:group={radio}
-                value={"S"}
+                value={"SW"}
                 on:change={handleChange}
             />
-            S
+            SW
         </label>
         <label>
             <input
                 type="radio"
                 bind:group={radio}
-                value={"W"}
+                value={"SE"}
                 on:change={handleChange}
             />
-            W
+            SE
         </label>
     </div>
 </section>
@@ -252,10 +263,14 @@
 
     input[type="radio"] {
         visibility: hidden;
+        display: none;
+        width: 0;
+      
     }
 
     label:has(input[type="radio"]) {
         cursor: pointer;
+        margin-right: 20px;
     }
 
     label:has(input[type="radio"]:checked) {

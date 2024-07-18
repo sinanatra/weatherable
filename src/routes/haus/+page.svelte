@@ -24,15 +24,16 @@
     $: guessedData = {
         temp: guessed[0]?.range,
         uv: guessed[0]?.range1,
-        weekRain: guessed[0]?.range2,
+        wrain_piezo: guessed[0]?.range2,
         humidity: guessed[0]?.range3,
-        rainChance: guessed[0]?.range4,
-
+        windspeed: guessed[0]?.range4,
+      
         len: guessed[0]?.range1, //fix
 
         curveSmooth: true
             ? guessed[0]?.radio == "NW" || guessed[0]?.radio == "NE"
             : false,
+
         outline: true
             ? guessed[0]?.radio == "SW" || guessed[0]?.radio == "SE"
             : false,
@@ -40,6 +41,18 @@
             ? guessed[0]?.radio1 == "Yes" || guessed[0]?.radio1 == "No"
             : false,
     };
+    $: openhaus =
+        guessedData?.outline == true
+            ? "1"
+            : guessedData?.curveSmooth == true
+              ? "2"
+              : guessedData?.mirror == true
+                ? "3"
+                : guessedData?.mirror == false
+                  ? "4"
+                  : "KA";
+
+    $: console.log(guessedData);
 
     // $: guessedData = {
     //     temp: 0.4,
@@ -70,6 +83,9 @@
                 </div>
             {/if}
         </section>
+
+        <h1>{openhaus}</h1>
+
         <section class="controls">
             <label>
                 Temp:
@@ -91,8 +107,7 @@
                     max="1"
                     step="0.1"
                     value={guessedData.uv}
-                    on:input={(e) =>
-                        updateGuessedData("uv", e.target.value)}
+                    on:input={(e) => updateGuessedData("uv", e.target.value)}
                 />
                 <span>{guessedData.uv}</span>
             </label>
@@ -103,11 +118,11 @@
                     min="0.1"
                     max="1"
                     step="0.1"
-                    value={guessedData.weekRain}
+                    value={guessedData.wrain_piezo}
                     on:input={(e) =>
-                        updateGuessedData("weekRain", e.target.value)}
+                        updateGuessedData("wrain_piezo", e.target.value)}
                 />
-                <span>{guessedData.weekRain}</span>
+                <span>{guessedData.wrain_piezo}</span>
             </label>
             <label>
                 Humidity:
@@ -123,17 +138,17 @@
                 <span>{guessedData.humidity}</span>
             </label>
             <label>
-                rainChance:
+                windspeed:
                 <input
                     type="range"
                     min="0.1"
                     max="1"
                     step="0.1"
-                    value={guessedData.rainChance}
+                    value={guessedData.windspeed}
                     on:input={(e) =>
-                        updateGuessedData("rainChance", e.target.value)}
+                        updateGuessedData("windspeed", e.target.value)}
                 />
-                <span>{guessedData.rainChance}</span>
+                <span>{guessedData.windspeed}</span>
             </label>
             <label>
                 Data length:
@@ -181,6 +196,7 @@
         height: 100vh;
         padding: 40px;
         font-size: 18px;
+        color: white;
     }
 
     label {
@@ -188,5 +204,9 @@
         align-items: center;
         gap: 10px;
         line-height: 18px;
+    }
+
+    h1 {
+        font-size: 6vw;
     }
 </style>

@@ -50,8 +50,8 @@
                 fullData = slicedData;
             }
             tribalVis(fullData, "temp");
-            tribalVis(fullData, "baromabs");
-            tribalVis(fullData, "feelslike");
+            tribalVis(fullData, "uv");
+            tribalVis(fullData, "wrain_piezo");
             tribalVis(fullData, "windspeed");
             tribalVis(fullData, "humidity");
         }
