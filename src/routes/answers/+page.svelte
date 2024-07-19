@@ -38,8 +38,8 @@
 
     p {
         display: inline-block;
-        font-size: 2vw;
-        line-height: 2vw;
+        font-size: 50px;
+        line-height: 50px;
         margin: 0;
         padding: 0;
         align-items: center;
