@@ -34,6 +34,7 @@
         align-items: center;
         align-content: space-around;
         justify-content: center;
+        text-align: center;
     }
 
     p {
