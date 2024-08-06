@@ -24,20 +24,21 @@
     $: guessedData = {
         temp: guessed[0]?.range,
         uv: guessed[0]?.range1,
-        weekRain: guessed[0]?.range2,
+        wrain_piezo: guessed[0]?.range2,
         humidity: guessed[0]?.range3,
-        rainChance: guessed[0]?.range4,
+        windspeed: guessed[0]?.range4,
 
         len: guessed[0]?.range1, //fix
 
         curveSmooth: true
-            ? guessed[0]?.radio == "NW" || guessed[0]?.radio == "NE"
+            ? guessed[0]?.radio1 == "NW" || guessed[0]?.radio1 == "NE"
             : false,
+
         outline: true
-            ? guessed[0]?.radio == "SW" || guessed[0]?.radio == "SE"
+            ? guessed[0]?.radio1 == "SW" || guessed[0]?.radio1 == "SE"
             : false,
         mirror: true
-            ? guessed[0]?.radio1 == "Yes" || guessed[0]?.radio1 == "No"
+            ? guessed[0]?.radio == "Yes" || guessed[0]?.radio == "No"
             : false,
     };
 
@@ -91,8 +92,7 @@
                     max="1"
                     step="0.1"
                     value={guessedData.uv}
-                    on:input={(e) =>
-                        updateGuessedData("uv", e.target.value)}
+                    on:input={(e) => updateGuessedData("uv", e.target.value)}
                 />
                 <span>{guessedData.uv}</span>
             </label>
@@ -103,11 +103,11 @@
                     min="0.1"
                     max="1"
                     step="0.1"
-                    value={guessedData.weekRain}
+                    value={guessedData.wrain_piezo}
                     on:input={(e) =>
-                        updateGuessedData("weekRain", e.target.value)}
+                        updateGuessedData("wrain_piezo", e.target.value)}
                 />
-                <span>{guessedData.weekRain}</span>
+                <span>{guessedData.wrain_piezo}</span>
             </label>
             <label>
                 Humidity:
@@ -123,17 +123,17 @@
                 <span>{guessedData.humidity}</span>
             </label>
             <label>
-                rainChance:
+                windspeed:
                 <input
                     type="range"
                     min="0.1"
                     max="1"
                     step="0.1"
-                    value={guessedData.rainChance}
+                    value={guessedData.windspeed}
                     on:input={(e) =>
-                        updateGuessedData("rainChance", e.target.value)}
+                        updateGuessedData("windspeed", e.target.value)}
                 />
-                <span>{guessedData.rainChance}</span>
+                <span>{guessedData.windspeed}</span>
             </label>
             <label>
                 Data length:
