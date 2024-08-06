@@ -178,7 +178,7 @@
             </label>
             <hr>
             <label>
-                Line Thickness:
+                Line:
                 <input
                     type="range"
                     min="1"
