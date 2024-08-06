@@ -40,6 +40,10 @@
         mirror: true
             ? guessed[0]?.radio == "Yes" || guessed[0]?.radio == "No"
             : false,
+
+        lineThickness: guessed[0]?.lineThickness || 1,
+        fillThickness: guessed[0]?.fillThickness || 0.05,
+
     };
 
     // $: guessedData = {
@@ -171,6 +175,33 @@
                     checked={guessedData.mirror}
                     on:change={(e) => (guessedData.mirror = e.target.checked)}
                 />
+            </label>
+            <hr>
+            <label>
+                Line Thickness:
+                <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value={guessedData.lineThickness}
+                    on:input={(e) =>
+                        updateGuessedData("lineThickness", e.target.value)}
+                />
+                <span>{guessedData.lineThickness}</span>
+            </label>
+            <label>
+                Offset:
+                <input
+                    type="range"
+                    min="0"
+                    max="0.5"
+                    step="0.05"
+                    value={guessedData.fillThickness}
+                    on:input={(e) =>
+                        updateGuessedData("fillThickness", e.target.value)}
+                />
+                <span>{guessedData.fillThickness}</span>
             </label>
         </section>
     {/if}

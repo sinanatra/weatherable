@@ -87,7 +87,9 @@
             .y1((d, i) => {
                 if (i !== 0 && i !== data.length - 1) {
                     return yScale(
-                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.05,
+                        d[dim] -
+                            guessedData[dim] / (i * 0.5 + 1) +
+                            guessedData.fillThickness,
                     );
                 } else {
                     return yScale(d[dim]);
@@ -104,7 +106,7 @@
         if (guessedData.outline) {
             context.beginPath();
             area(data);
-            context.lineWidth = 1;
+            context.lineWidth = guessedData.lineThickness;
             context.strokeStyle = "black";
             context.stroke();
             context.fillStyle = "rgba(255,255,255,0)";
@@ -112,7 +114,7 @@
         } else {
             context.beginPath();
             area(data);
-            context.lineWidth = 2;
+            context.lineWidth = guessedData.lineThickness + 1;
             context.strokeStyle = "white";
             context.stroke();
             context.fillStyle = "black";
