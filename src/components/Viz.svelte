@@ -67,7 +67,8 @@
         if (yExtent[0] === yExtent[1]) {
             return;
         } else {
-            yExtent[0] = +yExtent[0] - +guessedData[dim];
+            yExtent[0] =
+                +yExtent[0] - +guessedData[dim] + guessedData.fillThickness;
         }
 
         const xScale = d3
@@ -87,9 +88,7 @@
             .y1((d, i) => {
                 if (i !== 0 && i !== data.length - 1) {
                     return yScale(
-                        d[dim] -
-                            guessedData[dim] / (i * 0.5 + 1) +
-                            guessedData.fillThickness,
+                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.05,
                     );
                 } else {
                     return yScale(d[dim]);

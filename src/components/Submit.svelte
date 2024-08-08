@@ -57,16 +57,20 @@
     };
 </script>
 
-<p>Scroll down and fill out the questionnaire to get your personal ZK/U weather tattoo</p>
-<section>
+<p>
+    Scroll down and fill out the questionnaire to get your personal ZK/U weather
+    tattoo
+</p>
+<section dir="ltr">
     <div class="input-group">
-        <h2>Which mood do you associate with the weather today?</h2>
+        <h2>Which mood do you associate with the current weather?</h2>
         <textarea
             name="answer"
             id="answer"
             bind:value={text}
             maxlength="640"
-            lines="4"
+            lines="1"
+            placeholder="write here..."
             required
             on:input={handleChange}
         ></textarea>
@@ -231,13 +235,19 @@
         align-items: center;
     }
 
+    :global(.stick) section {
+        scroll-snap-type: y mandatory;
+        scroll-snap-align: middle;
+    }
+
     .input-group {
         margin-bottom: 4em;
         width: 90%;
     }
 
     h2 {
-        font-size: 1.5em;
+        font-size: 1.25em;
+        line-height: 0.8em;
         transform: scaleY(1.2);
         transform-origin: bottom;
         margin-bottom: 30px;
@@ -246,7 +256,7 @@
     textarea,
     input[type="range"] {
         width: 90%;
-        height: 350px;
+        height: 250px;
         font-size: 1em;
         resize: none;
         font-family: sans-serif;
@@ -257,6 +267,7 @@
         box-shadow: none;
         border: 1px solid #565656;
         color: #565656;
+        font-size: 0.6em;
     }
 
     input[type="range"] {
@@ -300,8 +311,10 @@
     }
 
     button {
+        display: block;
+        margin: 0 auto;
+        padding-bottom: 3em;
         font-size: 1.5em;
-        margin-bottom: 3em;
         cursor: pointer;
     }
 

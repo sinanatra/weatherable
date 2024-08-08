@@ -61,7 +61,7 @@
                 </div>
                 <div class="fold fold-center" bind:this={centerFold}>
                     <div class="fold-align">
-                        <div class="fold-content" bind:this={centerContent}>
+                        <div class="fold-content stick" bind:this={centerContent}>
                             <Submit on:change={handleChange} />
                         </div>
                     </div>
