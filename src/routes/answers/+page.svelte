@@ -1,19 +1,23 @@
 <script>
     import { onMount } from "svelte";
 
-    async function fetchData() {
-        const res = await fetch(`/api/get`);
+    async function fetchData(date) {
+        const encodedDate = encodeURIComponent(date);
+
+        const res = await fetch(`/api/getdate?date=${encodedDate}`);
         const json = await res.json();
+
         return json;
     }
 
     let data = [];
 
     onMount(async () => {
-        data = await fetchData();
+        data = await fetchData("2024-07-18");
     });
 </script>
 
+<h2>The perceived weather from the ZK/U openhaus</h2>
 <article>
     {#if data.length > 0}
         {#each data as d}
@@ -25,6 +29,11 @@
 </article>
 
 <style>
+    h2 {
+        font-size: 3rem;
+        text-align: center;
+    }
+
     article {
         font-size: 18px;
         padding: 10px;
