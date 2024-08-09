@@ -15,7 +15,7 @@
     // Function to fetch recent data
     async function fetchRecentData() {
         const response = await fetch(
-            "https://zku-middleware.vercel.app/api/weather/date/?date=2024-07-18&hour=20",
+            "https://zku-middleware.vercel.app/api/weather/date/?date=2024-07-18&hour=21",
         );
         const json = await response.json();
         return json;
