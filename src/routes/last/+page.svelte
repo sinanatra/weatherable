@@ -13,7 +13,8 @@
             "https://zku-middleware.vercel.app/api/recent",
         );
         const json = await response.json();
-        return json; //.slice(0, json.length / 2);
+        let datum = json.filter()
+        return datum; //.slice(0, json.length / 2);
     }
 
     let data = [];

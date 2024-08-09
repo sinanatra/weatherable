@@ -7,7 +7,7 @@
 
     let canvas;
     let context;
-    let width = 2124; //18cm
+    let width = 1180; //10cm
     let height = 236; // 2cm
 
     let margin = { top: 20, right: 10, bottom: 0, left: 10 };
@@ -78,7 +78,7 @@
 
         const yScale = d3
             .scaleLinear()
-            .domain(yExtent)
+            .domain([yExtent[0] - 0.1, yExtent[1] + 0.1]) 
             .range([height - margin.bottom, margin.top]);
 
         const area = d3
@@ -88,7 +88,9 @@
             .y1((d, i) => {
                 if (i !== 0 && i !== data.length - 1) {
                     return yScale(
-                        d[dim] - guessedData[dim] / (i * 0.5 + 1) + 0.05,
+                        d[dim] -
+                            guessedData[dim] * (1 / (i * 0.3 + 1)) +
+                            guessedData.fillThickness * 2,
                     );
                 } else {
                     return yScale(d[dim]);
