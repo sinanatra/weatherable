@@ -17,41 +17,85 @@
     let data = [];
     let guessed = [];
 
-    // $: console.log(guessed[0]);
-
-    $: guessedData = {
-        temp: guessed[0]?.range,
-        uv: guessed[0]?.range1,
-        wrain_piezo: guessed[0]?.range2,
-        humidity: guessed[0]?.range3,
-        windspeed: guessed[0]?.range4,
-
-        len: guessed[0]?.range1, //fix
-
-        curveSmooth: true
-            ? guessed[0]?.radio1 == "NW" || guessed[0]?.radio1 == "NE"
-            : false,
-
-        outline: true
-            ? guessed[0]?.radio1 == "SW" || guessed[0]?.radio1 == "SE"
-            : false,
-        mirror: true
-            ? guessed[0]?.radio == "Yes" || guessed[0]?.radio == "No"
-            : false,
-
-        lineThickness: guessed[0]?.lineThickness || 1,
-        fillThickness: guessed[0]?.fillThickness || 0.05,
+    const baselineState = {
+        temp: 0.5,
+        uv: 0.5,
+        wrain_piezo: 0.5,
+        humidity: 0.5,
+        windspeed: 0.5,
+        len: 0.5,
+        curveSmooth: false,
+        outline: false,
+        mirror: false,
     };
 
-    // $: guessedData = {
-    //     temp: 0.4,
-    //     uv: 0.5,
-    //     weekRain: 0.4,
-    //     humidity: 0.5,
-    //     rainChance: 0.9,
-    //     curveSmooth: false,
-    //     outline: false,
-    // };
+    // Adjust weights for boolean factors
+    const booleanWeight = 5;
+
+    function calculateAverage(guessedData) {
+        const keys = [
+            "temp",
+            "uv",
+            "wrain_piezo",
+            "humidity",
+            "windspeed",
+            "len",
+        ];
+        let total = 0;
+
+        keys.forEach((key) => {
+            total += guessedData[key];
+        });
+
+        // Add weighted contributions of the boolean factors
+        total += (guessedData.curveSmooth ? 1 : 0) * booleanWeight;
+        total += (guessedData.outline ? 1 : 0) * booleanWeight;
+        total += (guessedData.mirror ? 1 : 0) * booleanWeight;
+
+        // Calculate the average by dividing by the number of elements, considering the weight
+        return total / (keys.length + 3 * booleanWeight);
+    }
+
+    function mapUniqueCombinationToNumber(guessedData) {
+        // Define a unique base number for each combination of boolean values
+        let booleanBase = 0;
+        if (guessedData.curveSmooth) booleanBase += 7; // Assign 7 for curveSmooth true
+        if (guessedData.outline) booleanBase += 5; // Assign 5 for outline true
+        if (guessedData.mirror) booleanBase += 3; // Assign 3 for mirror true
+
+        // Calculate the numeric average for the remaining values
+        const average = calculateAverage(guessedData);
+
+        // Map this combination to a unique number by adding the booleanBase
+        return Math.round(average * 5 + booleanBase);
+    }
+
+    function getClosestNumber(guessedData) {
+        return mapUniqueCombinationToNumber(guessedData);
+    }
+
+    let closestNumber = 1;
+
+    $: closestNumber = getClosestNumber(guessedData);
+
+    let guessedData = {
+        temp: baselineState.temp,
+        uv: baselineState.uv,
+        wrain_piezo: baselineState.wrain_piezo,
+        humidity: baselineState.humidity,
+        windspeed: baselineState.windspeed,
+        len: baselineState.len,
+
+        curveSmooth: baselineState.curveSmooth,
+        outline: baselineState.outline,
+        mirror: baselineState.mirror,
+
+        lineThickness: 1,
+        fillThickness: 0.05,
+
+        answer: guessed[0]?.answer,
+        id: guessed[0]?._id,
+    };
 
     onMount(async () => {
         guessed = await fetchData();
@@ -59,7 +103,11 @@
     });
 
     function updateGuessedData(key, value) {
-        guessedData[key] = parseFloat(value);
+        if (typeof guessedData[key] === "boolean") {
+            guessedData[key] = value === "true";
+        } else {
+            guessedData[key] = parseFloat(value);
+        }
     }
 </script>
 
@@ -154,7 +202,10 @@
                     type="checkbox"
                     checked={guessedData.curveSmooth}
                     on:change={(e) =>
-                        (guessedData.curveSmooth = e.target.checked)}
+                        updateGuessedData(
+                            "curveSmooth",
+                            e.target.checked.toString(),
+                        )}
                 />
             </label>
             <label>
@@ -162,7 +213,11 @@
                 <input
                     type="checkbox"
                     checked={guessedData.outline}
-                    on:change={(e) => (guessedData.outline = e.target.checked)}
+                    on:change={(e) =>
+                        updateGuessedData(
+                            "outline",
+                            e.target.checked.toString(),
+                        )}
                 />
             </label>
             <label>
@@ -170,7 +225,11 @@
                 <input
                     type="checkbox"
                     checked={guessedData.mirror}
-                    on:change={(e) => (guessedData.mirror = e.target.checked)}
+                    on:change={(e) =>
+                        updateGuessedData(
+                            "mirror",
+                            e.target.checked.toString(),
+                        )}
                 />
             </label>
             <hr />
@@ -200,6 +259,9 @@
                 />
                 <span>{guessedData.fillThickness}</span>
             </label>
+            <div>
+                <p>The visualization is closest to step: {closestNumber}</p>
+            </div>
         </section>
     {/if}
 </article>

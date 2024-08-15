@@ -3,7 +3,7 @@
     import Viz from "@components/Viz.svelte";
 
     async function fetchData() {
-        const res = await fetch(`/api/last`);
+        const res = await fetch("/api/last");
         const json = await res.json();
         return json;
     }
@@ -13,67 +13,101 @@
             "https://zku-middleware.vercel.app/api/recent",
         );
         const json = await response.json();
-        let datum = json.filter()
-        return datum; //.slice(0, json.length / 2);
+        let datum = json;
+        return datum;
+    }
+
+    const seed = 42;
+
+    function seededRandom(seed) {
+        let x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+    }
+
+    function calculateAverage(item) {
+        const ranges = [
+            item.temp,
+            item.uv,
+            item.wrain_piezo,
+            item.humidity,
+            item.windspeed,
+        ];
+        return ranges.reduce((a, b) => a + b, 0) / ranges.length;
+    }
+
+    function getClosestNumber(guessedData) {
+        let closestNumber = 1;
+
+        if (guessedData.mirror) closestNumber += 12; // mirror flag influences range significantly
+        if (guessedData.curveSmooth) closestNumber += 6;
+        if (guessedData.outline) closestNumber += 3;
+
+        // Adjust based on the average of the ranges
+        const average = calculateAverage(guessedData);
+
+        if (average < 0.33) closestNumber += 0;
+        else if (average < 0.66) closestNumber += 1;
+        else closestNumber += 2;
+
+        return closestNumber;
     }
 
     let data = [];
     let guessed = [];
+    let guessedData = {};
 
-    // $: console.log(guessed[0]);
+    function updateGuessedData(key, value) {
+        guessedData[key] =
+            key === "curveSmooth" || key === "outline" || key === "mirror"
+                ? value
+                : parseFloat(value);
 
-    $: guessedData = {
-        temp: guessed[0]?.range,
-        uv: guessed[0]?.range1,
-        wrain_piezo: guessed[0]?.range2,
-        humidity: guessed[0]?.range3,
-        windspeed: guessed[0]?.range4,
+        // Recalculate average and closestNumber
+        guessedData.closestNumber = getClosestNumber(guessedData);
+    }
 
-        len: guessed[0]?.range1, //fix
+    $: if (guessed.length > 0) {
+        const average = calculateAverage(guessed[0]);
+        const seededAverage = seededRandom(seed) * average;
 
-        curveSmooth: true
-            ? guessed[0]?.radio1 == "NW" || guessed[0]?.radio1 == "NE"
-            : false,
+        guessedData = {
+            temp: guessed[0]?.range,
+            uv: guessed[0]?.range1,
+            wrain_piezo: guessed[0]?.range2,
+            humidity: guessed[0]?.range3,
+            windspeed: guessed[0]?.range4,
 
-        outline: true
-            ? guessed[0]?.radio1 == "SW" || guessed[0]?.radio1 == "SE"
-            : false,
-        mirror: true
-            ? guessed[0]?.radio == "Yes" || guessed[0]?.radio == "No"
-            : false,
+            len: seededAverage || 0.5,
 
-        lineThickness: guessed[0]?.lineThickness || 1,
-        fillThickness: guessed[0]?.fillThickness || 0.05,
+            curveSmooth:
+                guessed[0]?.radio1 == "NW" || guessed[0]?.radio1 == "NE",
+            outline: guessed[0]?.radio1 == "SW" || guessed[0]?.radio1 == "SE",
+            mirror: guessed[0]?.radio == "Yes",
 
-    };
+            lineThickness: guessed[0]?.lineThickness || 1,
+            fillThickness: guessed[0]?.fillThickness || 0.05,
+        };
 
-    // $: guessedData = {
-    //     temp: 0.4,
-    //     uv: 0.5,
-    //     weekRain: 0.4,
-    //     humidity: 0.5,
-    //     rainChance: 0.9,
-    //     curveSmooth: false,
-    //     outline: false,
-    // };
+        // guessedData.closestNumber = getClosestNumber(guessedData);
+    }
 
     onMount(async () => {
         guessed = await fetchData();
         data = await fetchRecentData();
+        guessedData.closestNumber = getClosestNumber(guessedData);
     });
-
-    function updateGuessedData(key, value) {
-        guessedData[key] = parseFloat(value);
-    }
 </script>
 
 <article>
     {#if guessed.length > 0}
+        {#if guessedData?.closestNumber}
+            <h1>
+                {guessedData.closestNumber}
+            </h1>
+        {/if}
         <section class="data">
             {#if data.length > 0}
-                <div>
-                    <Viz {data} {guessedData} />
-                </div>
+                <Viz {data} {guessedData} />
             {/if}
         </section>
         <section class="controls">
@@ -158,7 +192,7 @@
                     type="checkbox"
                     checked={guessedData.curveSmooth}
                     on:change={(e) =>
-                        (guessedData.curveSmooth = e.target.checked)}
+                        updateGuessedData("curveSmooth", e.target.checked)}
                 />
             </label>
             <label>
@@ -166,7 +200,8 @@
                 <input
                     type="checkbox"
                     checked={guessedData.outline}
-                    on:change={(e) => (guessedData.outline = e.target.checked)}
+                    on:change={(e) =>
+                        updateGuessedData("outline", e.target.checked)}
                 />
             </label>
             <label>
@@ -174,10 +209,11 @@
                 <input
                     type="checkbox"
                     checked={guessedData.mirror}
-                    on:change={(e) => (guessedData.mirror = e.target.checked)}
+                    on:change={(e) =>
+                        updateGuessedData("mirror", e.target.checked)}
                 />
             </label>
-            <hr>
+            <hr />
             <label>
                 Line:
                 <input
@@ -209,6 +245,9 @@
 </article>
 
 <style>
+    p {
+        line-height: 1;
+    }
     article {
         height: 100vh;
         padding: 40px;
@@ -217,7 +256,7 @@
 
     label {
         display: flex;
-        align-items: center;
+        /* align-items center; */
         gap: 10px;
         line-height: 18px;
     }

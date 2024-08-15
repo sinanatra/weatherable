@@ -50,7 +50,7 @@
 
         if (success) {
             console.log("Data submitted successfully.");
-            goto(`/haus`);
+            goto(`/last`);
         } else {
             console.error("Failed to submit data.");
         }
