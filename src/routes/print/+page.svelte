@@ -1,11 +1,11 @@
 <script>
     import { onMount } from "svelte";
-    import Viz from "@components/Viz.svelte";
+    import PrintViz from "@components/PrintViz.svelte";
     import { writable } from "svelte/store";
 
     const seed = 42;
     let selectedDate = writable("2024-07-18");
-    let selectedHour = writable("14");
+    let selectedHour = writable("14:00:00");
 
     function seededRandom(seed) {
         let x = Math.sin(seed) * 10000;
@@ -114,7 +114,10 @@
     async function updateData() {
         const date = $selectedDate;
         const hour = $selectedHour;
-        data = await fetchWeatherData(date, hour);
+        const fetchedData = await fetchWeatherData(date, hour);
+
+        // Update `data` and `guessedDataArray` with new references
+        data = [...fetchedData];
         guessedDataArray = generateGuessedDataForAllClosestNumbers(seed);
     }
 
@@ -148,8 +151,7 @@
         {#each guessedDataArray as guessedData, index}
             <div class="visualization">
                 {#if data.length > 0}
-                    <Viz {data} {guessedData} />
-
+                    <PrintViz {data} {guessedData} />
                     <h1>{guessedData.closestNumber}</h1>
                 {/if}
             </div>
@@ -200,16 +202,14 @@
 
     .visualization {
         display: flex;
-        flex-direction: column;
+        /* flex-direction: column; */
         align-items: center;
         justify-content: center;
-
-        border: 1px solid #ccc;
     }
 
     h1 {
         color: black;
-        font-size: 1.2em;
+        font-size: 6px;
         line-height: 1;
         margin-top: 5px;
     }

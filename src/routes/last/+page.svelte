@@ -245,7 +245,8 @@
 </article>
 
 <style>
-    p {
+    p,
+    h1 {
         line-height: 1;
     }
     article {

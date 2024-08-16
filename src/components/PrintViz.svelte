@@ -7,23 +7,30 @@
 
     let canvas;
     let context;
-    let width = 1180; //10cm
-    let height = 236; // 2cm
+
+    let width = 377;
+    let height = 91;
 
     let margin = { top: 20, right: 10, bottom: 0, left: 10 };
 
     onMount(() => {
         context = canvas.getContext("2d");
-        if (window.devicePixelRatio > 1) {
-            var canvasWidth = canvas.width;
-            var canvasHeight = canvas.height;
 
-            canvas.width = canvasWidth * window.devicePixelRatio;
-            canvas.height = canvasHeight * window.devicePixelRatio;
-            canvas.style.width = canvasWidth + "px";
-            canvas.style.height = canvasHeight + "px";
+        const scaleFactor = 5;
+        const canvasWidth = width * scaleFactor;
+        const canvasHeight = height * scaleFactor;
 
-            context.scale(window.devicePixelRatio, window.devicePixelRatio);
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+
+        context.scale(scaleFactor, scaleFactor);
+
+        context.imageSmoothingEnabled = true;
+
+        if (context && guessedData) {
+            drawVisualization();
         }
     });
 
@@ -78,7 +85,7 @@
 
         const yScale = d3
             .scaleLinear()
-            .domain([yExtent[0] - 0.1, yExtent[1] + 0.1]) 
+            .domain([yExtent[0] - 0.1, yExtent[1] + 0.1])
             .range([height - margin.bottom, margin.top]);
 
         const area = d3
