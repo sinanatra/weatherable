@@ -151,8 +151,8 @@
         {#each guessedDataArray as guessedData, index}
             <div class="visualization">
                 {#if data.length > 0}
-                    <PrintViz {data} {guessedData} />
                     <h1>{guessedData.closestNumber}</h1>
+                    <PrintViz {data} {guessedData} />
                 {/if}
             </div>
         {/each}
