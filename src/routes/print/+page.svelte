@@ -4,6 +4,7 @@
     import { writable } from "svelte/store";
 
     const seed = 42;
+
     let selectedDate = writable("2024-07-18");
     let selectedHour = writable("14:00:00");
 
@@ -20,82 +21,94 @@
             item.range3,
             item.range4,
         ];
-        return ranges.reduce((a, b) => a + b, 0) / ranges.length;
+        // Weighting the average so that higher values contribute more
+        const totalWeight = ranges.reduce(
+            (sum, value) => sum + Math.pow(value, 2),
+            0,
+        );
+        const weightedSum = ranges.reduce(
+            (sum, value) => sum + value * Math.pow(value, 2),
+            0,
+        );
+
+        return weightedSum / totalWeight;
     }
 
-    function getClosestNumber(item) {
-        let closestNumber = 1;
-
-        if (item.mirror) closestNumber += 12;
-        if (item.curveSmooth) closestNumber += 6;
-        if (item.outline) closestNumber += 3;
-
-        const average = calculateAverage(item);
-
-        if (average < 0.33) closestNumber += 0;
-        else if (average < 0.66) closestNumber += 1;
-        else closestNumber += 2;
-
-        return closestNumber;
-    }
-
-    function generateGuessedDataForAllClosestNumbers(seed) {
+    function generateAllCombinations(seed) {
         const orderedDataArray = [];
-        const maxClosestNumber = 24;
+        const radioOptions = [
+            { mirror: false, curveSmooth: false, outline: false },
+            { mirror: false, curveSmooth: false, outline: true },
+            { mirror: false, curveSmooth: true, outline: false },
+            { mirror: false, curveSmooth: true, outline: true },
+            { mirror: true, curveSmooth: false, outline: false },
+            { mirror: true, curveSmooth: false, outline: true },
+            { mirror: true, curveSmooth: true, outline: false },
+            { mirror: true, curveSmooth: true, outline: true },
+        ];
 
-        for (let i = 1; i <= maxClosestNumber; i++) {
-            const mirror = i > 12;
-            const curveSmooth = i % 12 > 6;
-            const outline = i % 6 > 3;
+        const averageCategories = [
+            { min: 0, max: 0.3 },
+            { min: 0.3, max: 0.6 },
+            { min: 0.6, max: 1.0 },
+        ];
 
-            let averageCategory;
-            if (i % 3 === 1) {
-                averageCategory = 0.1;
-            } else if (i % 3 === 2) {
-                averageCategory = 0.5;
-            } else {
-                averageCategory = 0.8;
-            }
+        radioOptions.forEach((radioOption, index) => {
+            averageCategories.forEach((category) => {
+                const randomItem = {
+                    range:
+                        category.min +
+                        (category.max - category.min) * Math.random(),
+                    range1:
+                        category.min +
+                        (category.max - category.min) * Math.random(),
+                    range2:
+                        category.min +
+                        (category.max - category.min) * Math.random(),
+                    range3:
+                        category.min +
+                        (category.max - category.min) * Math.random(),
+                    range4:
+                        category.min +
+                        (category.max - category.min) * Math.random(),
+                    radio1: ["NW", "NE", "SW", "SE"][
+                        Math.floor(Math.random() * 4)
+                    ],
+                    radio: radioOption.mirror ? "Yes" : "No",
+                    lineThickness: 1,
+                    fillThickness: 0.05,
+                    curveSmooth: radioOption.curveSmooth,
+                    outline: radioOption.outline,
+                    mirror: radioOption.mirror,
+                };
 
-            const randomItem = {
-                range: averageCategory * Math.random(),
-                range1: averageCategory * Math.random(),
-                range2: averageCategory * Math.random(),
-                range3: averageCategory * Math.random(),
-                range4: averageCategory * Math.random(),
-                radio1: ["NW", "NE", "SW", "SE"][Math.floor(Math.random() * 4)],
-                radio: mirror ? "Yes" : "No",
-                lineThickness: 1,
-                fillThickness: 0.05,
-                curveSmooth,
-                outline,
-                mirror,
-            };
+                const average = calculateAverage(randomItem);
+                const seededAverage =
+                    (seededRandom(seed) * 0.5 + 0.5) * average;
 
-            const average = calculateAverage(randomItem);
-            const seededAverage = seededRandom(seed) * average;
+                const guessedData = {
+                    temp: randomItem.range,
+                    uv: randomItem.range1,
+                    wrain_piezo: randomItem.range2,
+                    humidity: randomItem.range3,
+                    windspeed: randomItem.range4,
 
-            const guessedData = {
-                temp: randomItem.range,
-                uv: randomItem.range1,
-                wrain_piezo: randomItem.range2,
-                humidity: randomItem.range3,
-                windspeed: randomItem.range4,
+                    len: seededAverage,
 
-                len: seededAverage,
+                    curveSmooth: randomItem.curveSmooth,
+                    outline: randomItem.outline,
+                    mirror: randomItem.mirror,
 
-                curveSmooth: randomItem.curveSmooth,
-                outline: randomItem.outline,
-                mirror: randomItem.mirror,
+                    lineThickness: randomItem.lineThickness,
+                    fillThickness: randomItem.fillThickness,
 
-                lineThickness: randomItem.lineThickness,
-                fillThickness: randomItem.fillThickness,
+                    closestNumber:
+                        index * 3 + averageCategories.indexOf(category) + 1,
+                };
 
-                closestNumber: i, // Directly assign the expected closestNumber
-            };
-
-            orderedDataArray.push(guessedData);
-        }
+                orderedDataArray.push(guessedData);
+            });
+        });
 
         return orderedDataArray;
     }
@@ -118,7 +131,7 @@
 
         // Update `data` and `guessedDataArray` with new references
         data = [...fetchedData];
-        guessedDataArray = generateGuessedDataForAllClosestNumbers(seed);
+        guessedDataArray = generateAllCombinations(seed);
     }
 
     function printPage() {
@@ -132,7 +145,7 @@
 
 <article>
     <div class="head">
-        <h2>24 tribals for a specific hour</h2>
+        <h2>All Possible Variations for a Specific Hour</h2>
 
         <section class="controls">
             <label>
@@ -152,6 +165,7 @@
             <div class="visualization">
                 {#if data.length > 0}
                     <h1>{guessedData.closestNumber}</h1>
+                    <!-- <h1>{guessedData.len}</h1> -->
                     <PrintViz {data} {guessedData} />
                 {/if}
             </div>
@@ -202,7 +216,6 @@
 
     .visualization {
         display: flex;
-        /* flex-direction: column; */
         align-items: center;
         justify-content: center;
     }
