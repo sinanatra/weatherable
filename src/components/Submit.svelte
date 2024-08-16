@@ -12,8 +12,8 @@
     $: range4 = currentInput?.range4 ? currentInput.range4 : 0.1;
     // $: range5 = currentInput?.range5 ? currentInput.range5 : 0.1;
 
-    $: radio = currentInput?.radio ? currentInput.radio : "Yes";
-    $: radio1 = currentInput?.radio1 ? currentInput.radio1 : "NW";
+    $: radio = currentInput?.radio ? currentInput.radio : "";
+    $: radio1 = currentInput?.radio1 ? currentInput.radio1 : "";
 
     const dispatch = createEventDispatcher();
 
@@ -94,7 +94,7 @@
     </div>
 
     <div class="input-group">
-        <h2>What is today's UV factor?</h2>
+        <h2>How does the sun's intensity feel today?</h2>
         <span
             >- <input
                 type="range"
@@ -107,7 +107,7 @@
         </span>
     </div>
     <div class="input-group">
-        <h2>How much rain has fallen in the past week?</h2>
+        <h2>How much rain do you think has fallen over the past week?</h2>
         <span
             >- <input
                 type="range"
@@ -121,7 +121,7 @@
     </div>
 
     <div class="input-group">
-        <h2>How humid is it today?</h2>
+        <h2>How humid does the air feel today?</h2>
         <span
             >- <input
                 type="range"
@@ -135,7 +135,7 @@
     </div>
 
     <div class="input-group">
-        <h2>What was the average wind speed today?</h2>
+        <h2>How strong do you sense the wind today?</h2>
         <span
             >-<input
                 type="range"
@@ -170,7 +170,7 @@
         </label>
     </div>
     <div class="input-group">
-        <h2>In which direction is the wind blowing?</h2>
+        <h2>In which direction do you think that the wind is blowing?</h2>
         <label>
             <input
                 type="radio"

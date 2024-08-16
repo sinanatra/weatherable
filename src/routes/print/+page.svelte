@@ -118,32 +118,39 @@
         guessedDataArray = generateGuessedDataForAllClosestNumbers(seed);
     }
 
+    function printPage() {
+        window.print();
+    }
+
     onMount(async () => {
         await updateData(); // Fetch initial data
     });
 </script>
 
 <article>
-    <h2>Possible Visualizations to Print</h2>
+    <div class="head">
+        <h2>24 Variations of Pattern for a Specific Hour</h2>
 
-    <section class="controls">
-        <label>
-            Date:
-            <input type="date" bind:value={$selectedDate} />
-        </label>
-        <label>
-            Hour:
-            <input type="time" bind:value={$selectedHour} step="3600" />
-        </label>
-        <button on:click={updateData}>Update</button>
-    </section>
-
+        <section class="controls">
+            <label>
+                Date:
+                <input type="date" bind:value={$selectedDate} />
+            </label>
+            <label>
+                Hour:
+                <input type="time" bind:value={$selectedHour} step="3600" />
+            </label>
+            <button on:click={updateData}>Update</button>
+            <button on:click={printPage}>Print</button>
+        </section>
+    </div>
     <section class="data">
         {#each guessedDataArray as guessedData, index}
-            <div>
+            <div class="visualization">
                 {#if data.length > 0}
                     <Viz {data} {guessedData} />
-                    <pre>{JSON.stringify(guessedData, undefined, 2)}</pre>
+
+                    <h1>{guessedData.closestNumber}</h1>
                 {/if}
             </div>
         {/each}
@@ -151,38 +158,74 @@
 </article>
 
 <style>
-    h2 {
-        font-size: 3em;
-        text-align: center;
+    @page {
+        size: A4;
+        margin: 0;
     }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        max-width: 210mm; /* Ensure content fits within A4 page width */
+    }
+
+    h2 {
+        font-size: 1.5em;
+        line-height: 1.5;
+        background-color: none;
+        color: black;
+        text-shadow: none;
+    }
+
     article {
-        height: 100vh;
-        padding: 40px;
-        font-size: 18px;
+        background-color: white;
+
+        font-size: 12px;
+        max-width: 21cm;
+        margin: 0 auto;
     }
 
     .controls {
         display: flex;
-        gap: 20px;
+        gap: 5px;
         margin-bottom: 20px;
-        justify-content: center;
-        align-content: center;
-        align-items: center;
+        line-height: 1;
     }
 
     .data {
         display: flex;
-        flex-direction: column;
-        gap: 20px;
+        flex-wrap: wrap;
     }
 
-    div {
+    .visualization {
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid #ccc;
     }
 
-    span,
-    pre {
+    h1 {
+        color: black;
+        font-size: 1.2em;
         line-height: 1;
-        font-size: 0.7em;
+        margin-top: 5px;
+    }
+
+    @media print {
+        .head {
+            display: none;
+        }
+
+        h1 {
+            color: black;
+            font-size: 6px;
+        }
+
+        article {
+            font-size: 10px;
+        }
     }
 </style>
