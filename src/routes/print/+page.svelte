@@ -129,7 +129,7 @@
 
 <article>
     <div class="head">
-        <h2>24 Variations of Pattern for a Specific Hour</h2>
+        <h2>24 tribals for a specific hour</h2>
 
         <section class="controls">
             <label>
