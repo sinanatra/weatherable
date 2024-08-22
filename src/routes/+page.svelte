@@ -1,5 +1,5 @@
 <header>
-    <a href="/">Start</a> —
+    <a href="/questionnaire">Start</a> —
     <a href="/last">Last Result</a> —
 </header>
 <header>
