@@ -7,6 +7,7 @@
 
     let selectedDate = writable("2024-07-18");
     let selectedHour = writable("14:00:00");
+    let repeatPatterns = writable(false);
 
     function seededRandom(seed) {
         let x = Math.sin(seed) * 10000;
@@ -21,7 +22,6 @@
             item.range3,
             item.range4,
         ];
-        // Weighting the average so that higher values contribute more
         const totalWeight = ranges.reduce(
             (sum, value) => sum + Math.pow(value, 2),
             0,
@@ -34,7 +34,7 @@
         return weightedSum / totalWeight;
     }
 
-    function generateAllCombinations(seed) {
+    function generateAllCombinations(seed, repeat) {
         const orderedDataArray = [];
         const radioOptions = [
             { mirror: false, curveSmooth: false, outline: false },
@@ -76,7 +76,7 @@
                     ],
                     radio: radioOption.mirror ? "Yes" : "No",
                     lineThickness: 1,
-                    fillThickness: 0.05,
+                    fillThickness: 0.1,
                     curveSmooth: radioOption.curveSmooth,
                     outline: radioOption.outline,
                     mirror: radioOption.mirror,
@@ -106,7 +106,13 @@
                         index * 3 + averageCategories.indexOf(category) + 1,
                 };
 
-                orderedDataArray.push(guessedData);
+                if (repeat) {
+                    for (let i = 0; i < 24; i++) {
+                        orderedDataArray.push(guessedData);
+                    }
+                } else {
+                    orderedDataArray.push(guessedData);
+                }
             });
         });
 
@@ -129,9 +135,9 @@
         const hour = $selectedHour;
         const fetchedData = await fetchWeatherData(date, hour);
 
-        // Update `data` and `guessedDataArray` with new references
+        const repeat = $repeatPatterns;
         data = [...fetchedData];
-        guessedDataArray = generateAllCombinations(seed);
+        guessedDataArray = generateAllCombinations(seed, repeat);
     }
 
     function printPage() {
@@ -139,7 +145,7 @@
     }
 
     onMount(async () => {
-        await updateData(); // Fetch initial data
+        await updateData();
     });
 </script>
 
@@ -156,6 +162,10 @@
                 Hour:
                 <input type="time" bind:value={$selectedHour} step="3600" />
             </label>
+            <label>
+                Repeat Patterns:
+                <input type="checkbox" bind:checked={$repeatPatterns} />
+            </label>
             <button on:click={updateData}>Update</button>
             <button on:click={printPage}>Print</button>
         </section>
@@ -165,7 +175,6 @@
             <div class="visualization">
                 {#if data.length > 0}
                     <h1>{guessedData.closestNumber}</h1>
-                    <!-- <h1>{guessedData.len}</h1> -->
                     <PrintViz {data} {guessedData} />
                 {/if}
             </div>
@@ -183,9 +192,12 @@
         margin: 0;
         padding: 0;
         font-family: Arial, sans-serif;
-        max-width: 210mm; /* Ensure content fits within A4 page width */
+        max-width: 210mm;
     }
 
+    label {
+        color: black;
+    }
     h2 {
         font-size: 1.5em;
         line-height: 1.5;
@@ -196,7 +208,6 @@
 
     article {
         background-color: white;
-
         font-size: 12px;
         max-width: 21cm;
         margin: 0 auto;
@@ -207,11 +218,13 @@
         gap: 5px;
         margin-bottom: 20px;
         line-height: 1;
+        padding-left: 10px;
     }
 
     .data {
         display: flex;
         flex-wrap: wrap;
+        page-break-inside: avoid;
     }
 
     .visualization {
@@ -239,6 +252,10 @@
 
         article {
             font-size: 10px;
+        }
+
+        .data {
+            page-break-before: always;
         }
     }
 </style>
