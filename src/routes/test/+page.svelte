@@ -91,7 +91,7 @@
         mirror: baselineState.mirror,
 
         lineThickness: 1,
-        fillThickness: 0.05,
+        fillThickness: 0.1,
 
         answer: guessed[0]?.answer,
         id: guessed[0]?._id,

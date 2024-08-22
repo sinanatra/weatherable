@@ -6,8 +6,11 @@ export const POST = async ({ request }) => {
 
         if (data.answer) {
             const collection = await db.collection('weatherables');
+            const today = new Date().toISOString().split('T')[0];
+            const countResult = await collection.countDocuments({ date: today });
+            data.dailyId = countResult;
+            data.date = today;
             await collection.insertOne(data);
-
 
             return new Response(JSON.stringify(data), { status: 200 });
         } else {

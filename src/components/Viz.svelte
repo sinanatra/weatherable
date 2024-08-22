@@ -107,6 +107,8 @@
         if (guessedData.outline) {
             context.beginPath();
             area(data);
+            context.lineWidth = guessedData.lineThickness + 10;
+            context.strokeStyle = "red";
             context.lineWidth = guessedData.lineThickness;
             context.strokeStyle = "black";
             context.stroke();

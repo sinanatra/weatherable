@@ -44,7 +44,7 @@
         let diff = mapValue(guessedData.len, 0, 1, data.length - 1, 5);
 
         if (guessedData.outline) {
-            diff = mapValue(guessedData.len, 0, 5, data.length, 5);
+            diff = mapValue(guessedData.len, 0, 10, data.length, 10);
         }
 
         let fullData = [];
@@ -112,6 +112,14 @@
         }
 
         if (guessedData.outline) {
+            // context.beginPath();
+            // area(data);
+            // context.lineWidth = guessedData.lineThickness + 0.5;
+            // context.strokeStyle = "white";
+            // context.stroke();
+            // context.fillStyle = "rgba(255,255,255,0)";
+            // context.fill();
+
             context.beginPath();
             area(data);
             context.lineWidth = guessedData.lineThickness;

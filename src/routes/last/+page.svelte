@@ -46,7 +46,7 @@
     function getClosestNumber(guessedData) {
         let closestNumber = 1;
 
-        if (guessedData.mirror) closestNumber += 12; 
+        if (guessedData.mirror) closestNumber += 12;
         if (guessedData.curveSmooth) closestNumber += 6;
         if (guessedData.outline) closestNumber += 3;
 
@@ -69,7 +69,6 @@
                 ? value
                 : parseFloat(value);
 
-        // Recalculate average and closestNumber
         guessedData.closestNumber = getClosestNumber(guessedData);
     }
 
@@ -92,19 +91,19 @@
             mirror: guessed[0]?.radio == "Yes",
 
             lineThickness: guessed[0]?.lineThickness || 1,
-            fillThickness: guessed[0]?.fillThickness || 0.05,
+            fillThickness: guessed[0]?.fillThickness || 0.1,
         };
-
-        // guessedData.closestNumber = getClosestNumber(guessedData);
     }
 
     onMount(async () => {
         guessed = await fetchData();
-        data = await fetchWeatherData();
-        // data = await fetchRecentData();
+        // data = await fetchWeatherData();
+        data = await fetchRecentData();
 
         guessedData.closestNumber = getClosestNumber(guessedData);
     });
+
+    // $: console.log(guessed[0]);
 </script>
 
 <article>
@@ -118,18 +117,18 @@
                 {/if}
             </section>
 
-            {#if guessedData?.closestNumber}
+            {#if guessed[0]?.dailyId}
                 <p>Reach a tattoo operator with the current number:</p>
-                <h1>{guessedData.closestNumber}</h1>
-                <p>{guessedData.len}</p>
+                <h1>{guessed[0]?.dailyId}</h1>
+                <!-- <h1>{guessedData.closestNumber}</h1> -->
             {/if}
 
             <p class="again">
-                <a href="/">Start again</a>
+                <a href="/questionnaire">Start again</a>
             </p>
         {/if}
     </div>
-    <section class="controls">
+    <!-- <section class="controls">
         <label>
             Temp:
             <input
@@ -256,7 +255,7 @@
             />
             <span>{guessedData.fillThickness}</span>
         </label>
-    </section>
+    </section> -->
 </article>
 
 <style>
@@ -302,5 +301,34 @@
         display: block;
         font-size: 20vw;
         align-items: center;
+    }
+
+    article {
+        font-family:
+            Arial Narrow,
+            Helvetica,
+            sans-serif;
+        background-color: black;
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0;
+        font-size: 6vw;
+        line-height: 1.2em;
+
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: antialiased;
+        -o-font-smoothing: antialiased;
+    }
+
+    :global(h1, h2, h3) {
+        font-weight: normal;
+        margin: 5px;
+
+        background-color: #565656;
+        color: transparent;
+        text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5);
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        background-clip: text;
     }
 </style>

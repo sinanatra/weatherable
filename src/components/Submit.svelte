@@ -57,159 +57,160 @@
     };
 </script>
 
-<p>
-    Scroll down and fill out the questionnaire to get your personal ZK/U weather
-    tattoo
-</p>
-<section dir="ltr">
-    <div class="input-group">
-        <h2>Which mood do you associate with the current weather?</h2>
-        <textarea
-            name="answer"
-            id="answer"
-            bind:value={text}
-            maxlength="640"
-            lines="1"
-            placeholder="write here..."
-            required
-            on:input={handleChange}
-        ></textarea>
-    </div>
-
-    <div class="input-group">
-        <h2>How warm does it feel outside right now?</h2>
-
-        <span
-            >-
-            <input
-                type="range"
-                bind:value={range}
-                min="0.1"
-                max="1"
-                step="0.1"
+<article>
+    <p>
+        Scroll down and fill out the questionnaire to get your personal ZK/U
+        weather tattoo
+    </p>
+    <section dir="ltr">
+        <div class="input-group">
+            <h2>Which mood do you associate with the current weather?</h2>
+            <textarea
+                name="answer"
+                id="answer"
+                bind:value={text}
+                maxlength="640"
+                lines="1"
+                placeholder="write here..."
+                required
                 on:input={handleChange}
-            />
-            +
-        </span>
-    </div>
+            ></textarea>
+        </div>
 
-    <div class="input-group">
-        <h2>How does the sun's intensity feel today?</h2>
-        <span
-            >- <input
-                type="range"
-                bind:value={range1}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            /> +
-        </span>
-    </div>
-    <div class="input-group">
-        <h2>How much rain do you think has fallen over the past week?</h2>
-        <span
-            >- <input
-                type="range"
-                bind:value={range2}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            /> +
-        </span>
-    </div>
+        <div class="input-group">
+            <h2>How warm does it feel outside right now?</h2>
 
-    <div class="input-group">
-        <h2>How humid does the air feel today?</h2>
-        <span
-            >- <input
-                type="range"
-                bind:value={range3}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />+
-        </span>
-    </div>
+            <span
+                >-
+                <input
+                    type="range"
+                    bind:value={range}
+                    min="0.1"
+                    max="1"
+                    step="0.1"
+                    on:input={handleChange}
+                />
+                +
+            </span>
+        </div>
 
-    <div class="input-group">
-        <h2>How strong do you sense the wind today?</h2>
-        <span
-            >-<input
-                type="range"
-                bind:value={range4}
-                min="0.1"
-                max="1"
-                step="0.1"
-                on:input={handleChange}
-            />+
-        </span>
-    </div>
+        <div class="input-group">
+            <h2>How does the sun's intensity feel today?</h2>
+            <span
+                >- <input
+                    type="range"
+                    bind:value={range1}
+                    min="0.1"
+                    max="1"
+                    step="0.1"
+                    on:input={handleChange}
+                /> +
+            </span>
+        </div>
+        <div class="input-group">
+            <h2>How much rain do you think has fallen over the past week?</h2>
+            <span
+                >- <input
+                    type="range"
+                    bind:value={range2}
+                    min="0.1"
+                    max="1"
+                    step="0.1"
+                    on:input={handleChange}
+                /> +
+            </span>
+        </div>
 
-    <div class="input-group">
-        <h2>Were you checking today's weather forecast?</h2>
-        <label>
-            <input
-                type="radio"
-                bind:group={radio}
-                value={"Yes"}
-                on:change={handleChange}
-            />
-            Yes
-        </label>
-        <label>
-            <input
-                type="radio"
-                bind:group={radio}
-                value={"No"}
-                on:change={handleChange}
-            />
-            No
-        </label>
-    </div>
-    <div class="input-group">
-        <h2>In which direction do you think that the wind is blowing?</h2>
-        <label>
-            <input
-                type="radio"
-                bind:group={radio1}
-                value={"NW"}
-                on:change={handleChange}
-            />
-            NW
-        </label>
-        <label>
-            <input
-                type="radio"
-                bind:group={radio1}
-                value={"NE"}
-                on:change={handleChange}
-            />
-            NE
-        </label>
-        <label>
-            <input
-                type="radio"
-                bind:group={radio1}
-                value={"SW"}
-                on:change={handleChange}
-            />
-            SW
-        </label>
-        <label>
-            <input
-                type="radio"
-                bind:group={radio1}
-                value={"SE"}
-                on:change={handleChange}
-            />
-            SE
-        </label>
-    </div>
-</section>
+        <div class="input-group">
+            <h2>How humid does the air feel today?</h2>
+            <span
+                >- <input
+                    type="range"
+                    bind:value={range3}
+                    min="0.1"
+                    max="1"
+                    step="0.1"
+                    on:input={handleChange}
+                />+
+            </span>
+        </div>
 
+        <div class="input-group">
+            <h2>How strong do you sense the wind today?</h2>
+            <span
+                >-<input
+                    type="range"
+                    bind:value={range4}
+                    min="0.1"
+                    max="1"
+                    step="0.1"
+                    on:input={handleChange}
+                />+
+            </span>
+        </div>
+
+        <div class="input-group">
+            <h2>Were you checking today's weather forecast?</h2>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio}
+                    value={"Yes"}
+                    on:change={handleChange}
+                />
+                Yes
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio}
+                    value={"No"}
+                    on:change={handleChange}
+                />
+                No
+            </label>
+        </div>
+        <div class="input-group">
+            <h2>In which direction do you think that the wind is blowing?</h2>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio1}
+                    value={"NW"}
+                    on:change={handleChange}
+                />
+                NW
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio1}
+                    value={"NE"}
+                    on:change={handleChange}
+                />
+                NE
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio1}
+                    value={"SW"}
+                    on:change={handleChange}
+                />
+                SW
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio1}
+                    value={"SE"}
+                    on:change={handleChange}
+                />
+                SE
+            </label>
+        </div>
+    </section>
+</article>
 {#if !text || !radio || !radio1}
     <button disabled>Submit</button>
 {:else}
@@ -219,6 +220,37 @@
 <style>
     p {
         text-align: center;
+    }
+
+    article {
+        font-family:
+            Arial Narrow,
+            Helvetica,
+            sans-serif;
+        background-color: black;
+        color: rgba(255, 255, 255, 0.5);
+        margin: 0;
+        font-size: 6vw;
+        line-height: 1.2em;
+
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: antialiased;
+        -o-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-weight: normal;
+        margin: 5px;
+
+        background-color: #565656;
+        color: transparent;
+        text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5);
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        background-clip: text;
     }
 
     span {
