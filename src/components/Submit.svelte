@@ -346,7 +346,7 @@
         display: block;
         margin: 0 auto;
         padding-bottom: 3em;
-        font-size: 1.5em;
+        font-size: 5em;
         cursor: pointer;
     }
 

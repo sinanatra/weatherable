@@ -117,11 +117,9 @@
                 {/if}
             </section>
 
-            {#if guessed[0]?.dailyId}
-                <p>Reach a tattoo operator with the current number:</p>
-                <h1>{guessed[0]?.dailyId}</h1>
-                <!-- <h1>{guessedData.closestNumber}</h1> -->
-            {/if}
+            <p>Reach a tattoo operator and wait for your number:</p>
+            <h1>{guessed[0]?.dailyId}</h1>
+            <!-- <h1>{guessedData.closestNumber}</h1> -->
 
             <p class="again">
                 <a href="/questionnaire">Start again</a>
@@ -301,6 +299,7 @@
         display: block;
         font-size: 20vw;
         align-items: center;
+        color: red;
     }
 
     article {

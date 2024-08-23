@@ -8,6 +8,7 @@
     let selectedDate = writable("2024-07-18");
     let selectedHour = writable("14:00:00");
     let repeatPatterns = writable(false);
+    let layout = writable("default"); // New layout state
 
     function seededRandom(seed) {
         let x = Math.sin(seed) * 10000;
@@ -166,16 +167,23 @@
                 Repeat Patterns:
                 <input type="checkbox" bind:checked={$repeatPatterns} />
             </label>
+            <label>
+                Layout:
+                <select bind:value={$layout}>
+                    <option value="default">Default</option>
+                    <option value="fullWidth">Full Width</option>
+                </select>
+            </label>
             <button on:click={updateData}>Update</button>
             <button on:click={printPage}>Print</button>
         </section>
     </div>
-    <section class="data">
+    <section class="data" class:full-width={$layout === 'fullWidth'} class:square={$layout === 'square'}>
         {#each guessedDataArray as guessedData, index}
             <div class="visualization">
                 {#if data.length > 0}
                     <h1>{guessedData.closestNumber}</h1>
-                    <PrintViz {data} {guessedData} />
+                    <PrintViz {data} {guessedData} layout={$layout} />
                 {/if}
             </div>
         {/each}
@@ -188,16 +196,10 @@
         margin: 0;
     }
 
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        max-width: 210mm;
-    }
-
     label {
         color: black;
     }
+
     h2 {
         font-size: 1.5em;
         line-height: 1.5;
@@ -227,17 +229,31 @@
         page-break-inside: avoid;
     }
 
+    .data.full-width .visualization {
+        width: 100%; 
+    }
+
+  
+    /* .data:not(.full-width):not(.square) .visualization {
+        width: 33.33%;
+    } */
+
     .visualization {
         display: flex;
         align-items: center;
         justify-content: center;
+        color: red;
+        padding: 5px;
     }
 
     h1 {
-        color: black;
         font-size: 6px;
         line-height: 1;
         margin-top: 5px;
+    }
+
+    .head {
+        padding: 10px;
     }
 
     @media print {

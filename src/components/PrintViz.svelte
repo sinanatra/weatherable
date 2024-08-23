@@ -1,21 +1,32 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, afterUpdate } from "svelte";
     import * as d3 from "d3";
 
     export let data;
     export let guessedData;
+    export let layout;
 
     let canvas;
     let context;
 
-    let width = 377;
-    let height = 91;
+    let width, height;
+
+    $: {
+        if (layout === "fullWidth") {
+            width = 754;
+            height = 91;
+        } else if (layout === "square") {
+            width = 200;
+            height = 200;
+        } else {
+            width = 377;
+            height = 91;
+        }
+    }
 
     let margin = { top: 20, right: 10, bottom: 0, left: 10 };
 
-    onMount(() => {
-        context = canvas.getContext("2d");
-
+    function resizeCanvas() {
         const scaleFactor = 5;
         const canvasWidth = width * scaleFactor;
         const canvasHeight = height * scaleFactor;
@@ -26,16 +37,7 @@
         canvas.style.height = `${height}px`;
 
         context.scale(scaleFactor, scaleFactor);
-
         context.imageSmoothingEnabled = true;
-
-        if (context && guessedData) {
-            drawVisualization();
-        }
-    });
-
-    $: if (context && guessedData) {
-        drawVisualization();
     }
 
     function drawVisualization() {
@@ -112,14 +114,6 @@
         }
 
         if (guessedData.outline) {
-            // context.beginPath();
-            // area(data);
-            // context.lineWidth = guessedData.lineThickness + 0.5;
-            // context.strokeStyle = "white";
-            // context.stroke();
-            // context.fillStyle = "rgba(255,255,255,0)";
-            // context.fill();
-
             context.beginPath();
             area(data);
             context.lineWidth = guessedData.lineThickness;
@@ -141,9 +135,20 @@
     function mapValue(value, inMin, inMax, outMin, outMax) {
         return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
     }
+
+    onMount(() => {
+        context = canvas.getContext("2d");
+        resizeCanvas();
+        drawVisualization();
+    });
+
+    $: if (context && guessedData) {
+        resizeCanvas();
+        drawVisualization();
+    }
 </script>
 
-<canvas bind:this={canvas} {width} {height}></canvas>
+<canvas bind:this={canvas}></canvas>
 
 <style>
     canvas {

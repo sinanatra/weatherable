@@ -25,13 +25,13 @@ export async function GET({ url }) {
 
 export async function POST({ request }) {
     try {
-        const { dailyId } = await request.json();
+        const { dailyId, tattooed } = await request.json();
         const today = new Date().toISOString().split("T")[0];
 
         const collection = await db.collection("weatherables");
         const result = await collection.updateOne(
             { dailyId, date: today },
-            { $set: { tattooed: true } }
+            { $set: { tattooed: tattooed } }
         );
 
         if (result.matchedCount === 0) {

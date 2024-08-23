@@ -4,7 +4,7 @@
 </header>
 <header>
     <a href="/print">Print</a> —
-    <a href="/query">Tattoo Mantainance</a> —
+    <a href="/mantainance">Tattoo Mantainance</a> —
     <a href="/waiting">Who's next?</a>
 </header>
 
@@ -22,6 +22,7 @@
         border-radius: 3px;
         font-size: 6vw;
         line-height: 1.2em;
+        color: black;
     }
 
     a {
