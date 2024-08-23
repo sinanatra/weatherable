@@ -243,7 +243,7 @@
         align-items: center;
         justify-content: center;
         color: red;
-        padding: 5px;
+        /* padding: 5px; */
     }
 
     h1 {
