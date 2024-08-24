@@ -14,7 +14,7 @@
     $: {
         if (layout === "fullWidth") {
             width = 754;
-            height = 45;
+            height = 91;
         } else if (layout === "square") {
             width = 200;
             height = 200;
@@ -43,7 +43,7 @@
     function drawVisualization() {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        let diff = mapValue(guessedData.len, 0, 2, data.length - 1, 10);
+        let diff = mapValue(guessedData.len, 0, 5, data.length - 1, 10);
 
         if (guessedData.outline) {
             diff = mapValue(guessedData.len, 0, 10, data.length, 10);

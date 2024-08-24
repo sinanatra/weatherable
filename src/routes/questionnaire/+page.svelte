@@ -103,7 +103,7 @@
     .fold {
         overflow: hidden;
         width: 70vw;
-        height: 60vh;
+        height: 90vh;
     }
 
     .fold-top {
