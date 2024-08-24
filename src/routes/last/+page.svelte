@@ -323,11 +323,11 @@
         font-weight: normal;
         margin: 5px;
 
-        background-color: #565656;
-        color: transparent;
+        /* background-color: #565656; */
+        /* color: transparent; */
         text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5);
-        -webkit-background-clip: text;
+        /* -webkit-background-clip: text;
         -moz-background-clip: text;
-        background-clip: text;
+        background-clip: text; */
     }
 </style>

@@ -139,7 +139,6 @@
 </script>
 
 <article>
-    <h1>Tattoo Maintenance</h1>
     <section class="input-section">
         <div>
             <label>
@@ -202,7 +201,7 @@
         margin-top: 1em;
     }
 
-    section {
+    .viz-section {
         margin-top: 20px;
     }
 </style>

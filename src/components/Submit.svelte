@@ -55,6 +55,10 @@
             console.error("Failed to submit data.");
         }
     };
+
+    function mapValue(value, inMin, inMax, outMin, outMax) {
+        return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+    }
 </script>
 
 <article>
@@ -79,7 +83,6 @@
 
         <div class="input-group">
             <h2>How warm does it feel outside right now?</h2>
-
             <span
                 >-
                 <input
@@ -87,10 +90,13 @@
                     bind:value={range}
                     min="0.1"
                     max="1"
-                    step="0.1"
+                    step="0.01"
                     on:input={handleChange}
                 />
                 +
+            </span>
+            <span>
+                {parseInt(mapValue(range, 0.1, 1, 0, 40))}°
             </span>
         </div>
 
@@ -102,9 +108,12 @@
                     bind:value={range1}
                     min="0.1"
                     max="1"
-                    step="0.1"
+                    step="0.01"
                     on:input={handleChange}
                 /> +
+            </span>
+            <span>
+                {parseInt(mapValue(range1, 0.1, 1, 0, 11))} UV
             </span>
         </div>
         <div class="input-group">
@@ -115,9 +124,12 @@
                     bind:value={range2}
                     min="0.1"
                     max="1"
-                    step="0.1"
+                    step="0.01"
                     on:input={handleChange}
                 /> +
+            </span>
+            <span>
+                {parseInt(mapValue(range2, 0.1, 1, 0, 100))} mm/h
             </span>
         </div>
 
@@ -129,9 +141,12 @@
                     bind:value={range3}
                     min="0.1"
                     max="1"
-                    step="0.1"
+                    step="0.01"
                     on:input={handleChange}
                 />+
+            </span>
+            <span>
+                {parseInt(mapValue(range3, 0.1, 1, 0, 100))} %
             </span>
         </div>
 
@@ -143,9 +158,12 @@
                     bind:value={range4}
                     min="0.1"
                     max="1"
-                    step="0.1"
+                    step="0.01"
                     on:input={handleChange}
                 />+
+            </span>
+            <span>
+                {parseInt(mapValue(range4, 0.1, 1, 0, 70))} m/s
             </span>
         </div>
 
@@ -245,12 +263,12 @@
         font-weight: normal;
         margin: 5px;
 
-        background-color: #565656;
-        color: transparent;
-        text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5);
-        -webkit-background-clip: text;
+        /* background-color: #565656; */
+        /* color: transparent; */
+        /* text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5); */
+        /* -webkit-background-clip: text;
         -moz-background-clip: text;
-        background-clip: text;
+        background-clip: text; */
     }
 
     span {
@@ -287,7 +305,7 @@
 
     textarea,
     input[type="range"] {
-        width: 90%;
+        width: 80%;
         height: 250px;
         font-size: 1em;
         resize: none;
@@ -345,8 +363,8 @@
     button {
         display: block;
         margin: 0 auto;
-        padding-bottom: 3em;
-        font-size: 5em;
+        margin-bottom: 3em;
+        font-size: 10em;
         cursor: pointer;
     }
 
