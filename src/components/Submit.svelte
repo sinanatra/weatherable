@@ -62,7 +62,7 @@
 </script>
 
 <article>
-    <p>
+    <p style="margin-top: 10rem;">
         Scroll down and fill out the questionnaire to get your personal ZK/U
         weather tattoo
     </p>

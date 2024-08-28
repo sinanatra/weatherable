@@ -98,7 +98,7 @@
                 <section class="data">
                     <h2>{doc.dailyId}</h2>
                     <div>
-                        <Viz {data} guessedData={prepareGuessedData(doc)} />
+                        <Viz {data} guessedData={prepareGuessedData(doc)} invert={true} />
                     </div>
                 </section>
             {/if}

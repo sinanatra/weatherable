@@ -169,7 +169,7 @@
             <section class="data">
                 {#if data.length > 0}
                     <div>
-                        <Viz {data} {guessedData} />
+                        <Viz {data} {guessedData} invert={true} />
                     </div>
                 {/if}
             </section>

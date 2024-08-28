@@ -4,6 +4,7 @@
 
     export let data;
     export let guessedData;
+    export let invert;
 
     let canvas;
     let context;
@@ -78,7 +79,7 @@
 
         const yScale = d3
             .scaleLinear()
-            .domain([yExtent[0] - 0.1, yExtent[1] + 0.1]) 
+            .domain([yExtent[0] - 0.1, yExtent[1] + 0.1])
             .range([height - margin.bottom, margin.top]);
 
         const area = d3
@@ -108,9 +109,9 @@
             context.beginPath();
             area(data);
             context.lineWidth = guessedData.lineThickness + 10;
-            context.strokeStyle = "red";
+            context.strokeStyle = invert ? "white" : "black";
             context.lineWidth = guessedData.lineThickness;
-            context.strokeStyle = "black";
+            context.strokeStyle = invert ? "white" : "black";
             context.stroke();
             context.fillStyle = "rgba(255,255,255,0)";
             context.fill();
@@ -118,9 +119,9 @@
             context.beginPath();
             area(data);
             context.lineWidth = guessedData.lineThickness + 1;
-            context.strokeStyle = "white";
+            context.strokeStyle = invert ? "black" : "white";
             context.stroke();
-            context.fillStyle = "black";
+            context.fillStyle = invert ? "white" : "black";
             context.fill();
         }
     }
@@ -130,10 +131,9 @@
     }
 </script>
 
-<canvas bind:this={canvas} {width} {height}></canvas>
-
-<style>
-    canvas {
-        background-color: white;
-    }
-</style>
+<canvas
+    bind:this={canvas}
+    {width}
+    {height}
+    style="background-color:{invert ? 'black' : 'white'};"
+></canvas>
