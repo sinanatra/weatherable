@@ -227,13 +227,13 @@
                 SE
             </label>
         </div>
+        {#if !text || !radio || !radio1}
+            <button disabled>Submit</button>
+        {:else}
+            <button on:click={handleSubmit}>Submit</button>
+        {/if}
     </section>
 </article>
-{#if !text || !radio || !radio1}
-    <button disabled>Submit</button>
-{:else}
-    <button on:click={handleSubmit}>Submit</button>
-{/if}
 
 <style>
     p {
@@ -336,13 +336,13 @@
         appearance: none;
         width: 20px;
         height: 20px;
-        background: blue;
+        background: yellow;
     }
 
     input[type="range"]::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background: blue;
+        background: yellow;
     }
 
     input[type="radio"] {
@@ -357,15 +357,15 @@
     }
 
     label:has(input[type="radio"]:checked) {
-        color: blue;
+        color: yellow;
     }
 
     button {
         display: block;
         margin: 0 auto;
-        margin-bottom: 3em;
-        font-size: 10em;
+        font-size: 220px;
         cursor: pointer;
+        margin-bottom: 200px;
     }
 
     a {

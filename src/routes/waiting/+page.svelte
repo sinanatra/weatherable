@@ -147,6 +147,6 @@
         top: 0;
         margin: 0 auto;
         font-size: 13rem;
-        color: red;
+        color: yellow;
     }
 </style>

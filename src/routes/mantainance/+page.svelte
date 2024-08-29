@@ -139,6 +139,9 @@
 </script>
 
 <article>
+    <header>
+    <h1>Tattoo mantainance</h1>
+    </header>
     <section class="input-section">
         <div>
             <label>
@@ -148,14 +151,6 @@
             <br />
             <button on:click={fetchDocument}>Get Tattoo</button>
         </div>
-        <div>
-            <label>
-                <input type="checkbox" bind:checked={tattooed} />
-                Mark as Tattooed
-            </label>
-            <br />
-            <button on:click={submitTattooed}>Update</button>
-        </div>
     </section>
 
     <section class="viz-section">
@@ -164,31 +159,78 @@
         {/if}
 
         {#if documentData}
-            <h1>{tattoo}</h1>
+            <!-- <p>Select tattoo number: <strong>{tattoo}</strong></p> -->
 
             <section class="data">
                 {#if data.length > 0}
                     <div>
+                        <h2>{tattoo}</h2>
                         <Viz {data} {guessedData} invert={true} />
                     </div>
                 {/if}
             </section>
 
+            <div>
+                <label>
+                    <input type="checkbox" bind:checked={tattooed} />
+                    Mark as Tattooed
+                </label>
+                <br />
+                <button on:click={submitTattooed}>Update</button>
+            </div>
             <pre>{JSON.stringify(guessedData, null, 2)}</pre>
         {/if}
     </section>
 </article>
 
 <style>
+    header {
+        background-color: white;
+        color: black;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px dashed white;
+        padding: 5px;
+    }
     article {
         width: 100vw;
         height: 100vh;
+        overflow-x: hidden;
+    }
+
+    article > * {
         padding: 10px;
+    }
+
+    h1 {
+        text-shadow: unset;
+        font-weight: 400;
+        font-size: 3rem;
+    }
+
+    .data > div {
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
+    h2 {
+        position: absolute;
+        top: 0;
+        margin: 0 auto;
+        font-size: 10rem;
+        color: yellow;
+    }
+
+    p {
+        text-shadow: unset;
     }
 
     .input-section {
         display: flex;
         align-items: flex-start;
+        flex-wrap: wrap;
         gap: 20px;
         max-width: 640px;
     }

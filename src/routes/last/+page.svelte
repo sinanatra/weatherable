@@ -299,7 +299,7 @@
         display: block;
         font-size: 20vw;
         align-items: center;
-        color: red;
+        color: yellow;
     }
 
     article {

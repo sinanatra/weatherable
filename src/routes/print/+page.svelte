@@ -5,8 +5,18 @@
 
     const seed = 42;
 
-    let selectedDate = writable("2024-07-18");
-    let selectedHour = writable("14:00:00");
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+
+    now.setHours(now.getHours() - 2);
+    now.setMinutes(0, 0, 0);
+    const twoHoursAgo = now.toTimeString().split(" ")[0];
+
+    let selectedDate = writable(today);
+    let selectedHour = writable(twoHoursAgo);
+
+    // let selectedDate = writable("2024-07-18");
+    // let selectedHour = writable("14:00:00");
     let repeatPatterns = writable(false);
     let layout = writable("default"); // New layout state
 
@@ -178,7 +188,11 @@
             <button on:click={printPage}>Print</button>
         </section>
     </div>
-    <section class="data" class:full-width={$layout === 'fullWidth'} class:square={$layout === 'square'}>
+    <section
+        class="data"
+        class:full-width={$layout === "fullWidth"}
+        class:square={$layout === "square"}
+    >
         {#each guessedDataArray as guessedData, index}
             <div class="visualization">
                 {#if data.length > 0}
@@ -230,10 +244,9 @@
     }
 
     .data.full-width .visualization {
-        width: 100%; 
+        width: 100%;
     }
 
-  
     /* .data:not(.full-width):not(.square) .visualization {
         width: 33.33%;
     } */
