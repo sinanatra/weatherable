@@ -23,3 +23,8 @@ p {
 p {
     padding-bottom: 10px;
 }
+
+::selection {
+    background-color: yellow;
+    color: black;
+}

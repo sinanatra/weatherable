@@ -59,6 +59,11 @@
     function mapValue(value, inMin, inMax, outMin, outMax) {
         return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
     }
+
+    function handleDirectionChange(value) {
+        radio1 = value;
+        handleChange();
+    }
 </script>
 
 <article>
@@ -149,89 +154,323 @@
                 {parseInt(mapValue(range3, 0.1, 1, 0, 100))} %
             </span>
         </div>
-
-        <div class="input-group">
-            <h2>How strong do you sense the wind today?</h2>
-            <span
-                >-<input
-                    type="range"
-                    bind:value={range4}
-                    min="0.1"
-                    max="1"
-                    step="0.01"
-                    on:input={handleChange}
-                />+
-            </span>
-            <span>
-                {parseInt(mapValue(range4, 0.1, 1, 0, 70))} m/s
-            </span>
-        </div>
-
-        <div class="input-group">
-            <h2>Were you checking today's weather forecast?</h2>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio}
-                    value={"Yes"}
-                    on:change={handleChange}
-                />
-                Yes
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio}
-                    value={"No"}
-                    on:change={handleChange}
-                />
-                No
-            </label>
-        </div>
         <div class="input-group">
             <h2>In which direction do you think that the wind is blowing?</h2>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio1}
-                    value={"NW"}
-                    on:change={handleChange}
-                />
-                NW
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio1}
-                    value={"NE"}
-                    on:change={handleChange}
-                />
-                NE
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio1}
-                    value={"SW"}
-                    on:change={handleChange}
-                />
-                SW
-            </label>
-            <label>
-                <input
-                    type="radio"
-                    bind:group={radio1}
-                    value={"SE"}
-                    on:change={handleChange}
-                />
-                SE
-            </label>
+            <div class="wind-direction">
+                <svg viewBox="0 0 600 600" class="arrows">
+                    <defs>
+                        <marker
+                            id="arrowhead-hover"
+                            markerWidth="6"
+                            markerHeight="4"
+                            refX="4.5"
+                            refY="2"
+                            orient="auto"
+                        >
+                            <polygon
+                                points="0 0, 6 2, 0 4"
+                                fill="yellow"
+                                style="pointer-events: auto;"
+                            />
+                        </marker>
+                        <marker
+                            id="arrowhead"
+                            markerWidth="6"
+                            markerHeight="4"
+                            refX="4.5"
+                            refY="2"
+                            orient="auto"
+                        >
+                            <polygon
+                                points="0 0, 6 2, 0 4"
+                                fill="#BCBCBC"
+                                style="pointer-events: auto;"
+                            />
+                        </marker>
+                        <marker
+                            id="arrowhead-selected"
+                            markerWidth="6"
+                            markerHeight="4"
+                            refX="4.5"
+                            refY="2"
+                            orient="auto"
+                        >
+                            <polygon
+                                points="0 0, 6 2, 0 4"
+                                fill="yellow"
+                                style="pointer-events: auto;"
+                            />
+                        </marker>
+                    </defs>
+                    <!-- Lines with arrowheads -->
+                    <line
+                        id="arrow-N"
+                        x1="250"
+                        y1="250"
+                        x2="250"
+                        y2="50"
+                        marker-end={radio1 === "N"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("N")}
+                        class:selected={radio1 === "N"}
+                    />
+                    <line
+                        id="arrow-NNE"
+                        x1="250"
+                        y1="250"
+                        x2="325"
+                        y2="65"
+                        marker-end={radio1 === "NNE"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("NNE")}
+                        class:selected={radio1 === "NNE"}
+                    />
+                    <line
+                        id="arrow-NE"
+                        x1="250"
+                        y1="250"
+                        x2="400"
+                        y2="100"
+                        marker-end={radio1 === "NE"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("NE")}
+                        class:selected={radio1 === "NE"}
+                    />
+                    <line
+                        id="arrow-ENE"
+                        x1="250"
+                        y1="250"
+                        x2="450"
+                        y2="175"
+                        marker-end={radio1 === "ENE"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("ENE")}
+                        class:selected={radio1 === "ENE"}
+                    />
+                    <line
+                        id="arrow-E"
+                        x1="250"
+                        y1="250"
+                        x2="460"
+                        y2="250"
+                        marker-end={radio1 === "E"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("E")}
+                        class:selected={radio1 === "E"}
+                    />
+                    <line
+                        id="arrow-ESE"
+                        x1="250"
+                        y1="250"
+                        x2="450"
+                        y2="325"
+                        marker-end={radio1 === "ESE"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("ESE")}
+                        class:selected={radio1 === "ESE"}
+                    />
+                    <line
+                        id="arrow-SE"
+                        x1="250"
+                        y1="250"
+                        x2="410"
+                        y2="390"
+                        marker-end={radio1 === "SE"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("SE")}
+                        class:selected={radio1 === "SE"}
+                    />
+                    <line
+                        id="arrow-SSE"
+                        x1="250"
+                        y1="250"
+                        x2="335"
+                        y2="435"
+                        marker-end={radio1 === "SSE"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("SSE")}
+                        class:selected={radio1 === "SSE"}
+                    />
+                    <line
+                        id="arrow-S"
+                        x1="250"
+                        y1="250"
+                        x2="250"
+                        y2="450"
+                        marker-end={radio1 === "S"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("S")}
+                        class:selected={radio1 === "S"}
+                    />
+                    <line
+                        id="arrow-SSW"
+                        x1="250"
+                        y1="250"
+                        x2="170"
+                        y2="437"
+                        marker-end={radio1 === "SSW"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("SSW")}
+                        class:selected={radio1 === "SSW"}
+                    />
+                    <line
+                        id="arrow-SW"
+                        x1="250"
+                        y1="250"
+                        x2="100"
+                        y2="400"
+                        marker-end={radio1 === "SW"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("SW")}
+                        class:selected={radio1 === "SW"}
+                    />
+                    <line
+                        id="arrow-WSW"
+                        x1="250"
+                        y1="250"
+                        x2="50"
+                        y2="325"
+                        marker-end={radio1 === "WSW"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("WSW")}
+                        class:selected={radio1 === "WSW"}
+                    />
+                    <line
+                        id="arrow-W"
+                        x1="250"
+                        y1="250"
+                        x2="40"
+                        y2="250"
+                        marker-end={radio1 === "W"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("W")}
+                        class:selected={radio1 === "W"}
+                    />
+                    <line
+                        id="arrow-WNW"
+                        x1="250"
+                        y1="250"
+                        x2="50"
+                        y2="175"
+                        marker-end={radio1 === "WNW"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("WNW")}
+                        class:selected={radio1 === "WNW"}
+                    />
+                    <line
+                        id="arrow-NW"
+                        x1="250"
+                        y1="250"
+                        x2="100"
+                        y2="100"
+                        marker-end={radio1 === "NW"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("NW")}
+                        class:selected={radio1 === "NW"}
+                    />
+                    <line
+                        id="arrow-NNW"
+                        x1="250"
+                        y1="250"
+                        x2="165"
+                        y2="65"
+                        marker-end={radio1 === "NNW"
+                            ? "url(#arrowhead-selected)"
+                            : "url(#arrowhead)"}
+                        on:click={() => handleDirectionChange("NNW")}
+                        class:selected={radio1 === "NNW"}
+                    />
+                    <!-- Directional Labels -->
+                    <text
+                        x="250"
+                        y="20"
+                        text-anchor="middle"
+                        fill="white"
+                        font-size="16">N</text
+                    >
+                    <text
+                        x="490"
+                        y="260"
+                        text-anchor="middle"
+                        fill="white"
+                        font-size="16">E</text
+                    >
+                    <text
+                        x="250"
+                        y="510"
+                        text-anchor="middle"
+                        fill="white"
+                        font-size="16">S</text
+                    >
+                    <text
+                        x="10"
+                        y="260"
+                        text-anchor="middle"
+                        fill="white"
+                        font-size="16">W</text
+                    >
+                </svg>
+            </div>
+            <div class="input-group">
+                <h2>How strong do you sense the wind today?</h2>
+                <span
+                    >-<input
+                        type="range"
+                        bind:value={range4}
+                        min="0.1"
+                        max="1"
+                        step="0.01"
+                        on:input={handleChange}
+                    />+
+                </span>
+                <span>
+                    {parseInt(mapValue(range4, 0.1, 1, 0, 70))} m/s
+                </span>
+            </div>
+
+            <div class="input-group">
+                <h2>Were you checking today's weather forecast?</h2>
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={radio}
+                        value={"Yes"}
+                        on:change={handleChange}
+                    />
+                    Yes
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={radio}
+                        value={"No"}
+                        on:change={handleChange}
+                    />
+                    No
+                </label>
+            </div>
+
+            {#if !text || !radio || !radio1}
+                <button disabled>Submit</button>
+            {:else}
+                <button on:click={handleSubmit}>Submit</button>
+            {/if}
         </div>
-        {#if !text || !radio || !radio1}
-            <button disabled>Submit</button>
-        {:else}
-            <button on:click={handleSubmit}>Submit</button>
-        {/if}
     </section>
 </article>
 
@@ -316,7 +555,7 @@
         background: none;
         box-shadow: none;
         border: 1px solid #565656;
-        color: #565656;
+        color: yellow;
         font-size: 0.6em;
     }
 
@@ -370,5 +609,36 @@
 
     a {
         color: white;
+    }
+
+    .wind-direction {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        margin: 100px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .arrows line {
+        cursor: pointer;
+        stroke-width: 10;
+        stroke: #bcbcbc;
+    }
+
+    .arrows line:hover,
+    .arrows line.selected {
+        stroke: yellow;
+    }
+
+    .arrows line:hover {
+        stroke: yellow;
+        marker-end: url(#arrowhead-hover);
+    }
+
+    .arrows text {
+        fill: yellow;
+        font-size: 20px;
     }
 </style>

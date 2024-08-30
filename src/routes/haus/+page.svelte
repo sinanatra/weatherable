@@ -30,13 +30,8 @@
 
         len: guessed[0]?.range1, //fix
 
-        curveSmooth: true
-            ? guessed[0]?.radio1 == "NW" || guessed[0]?.radio1 == "NE"
-            : false,
-
-        outline: true
-            ? guessed[0]?.radio1 == "SW" || guessed[0]?.radio1 == "SE"
-            : false,
+        curveSmooth: ["N", "NNE", "NE", "ENE"].includes(guessed[0]?.radio1),
+        outline: ["S", "SSW", "SW", "WSW"].includes(guessed[0]?.radio1),
         mirror: true
             ? guessed[0]?.radio == "Yes" || guessed[0]?.radio == "No"
             : false,

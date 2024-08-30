@@ -234,7 +234,7 @@
         gap: 5px;
         margin-bottom: 20px;
         line-height: 1;
-        padding-left: 10px;
+        /* padding-left: 10px; */
     }
 
     .data {
