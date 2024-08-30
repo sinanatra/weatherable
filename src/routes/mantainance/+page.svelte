@@ -8,8 +8,8 @@
     let error = null;
     let data = [];
     let guessedData = {};
+    let averages = {};
 
-    // Fetch document data based on the dailyId
     async function fetchDocument() {
         error = null;
         try {
@@ -27,7 +27,6 @@
         }
     }
 
-    // Helper function to fetch a document by ID
     async function fetchDocumentById(dailyId) {
         const response = await fetch(`/api/getTattoo?dailyId=${dailyId}`);
         if (response.ok) {
@@ -38,7 +37,6 @@
         }
     }
 
-    // Submit the tattooed status to the server
     async function submitTattooed() {
         error = null;
         try {
@@ -48,7 +46,6 @@
         }
     }
 
-    // Helper function to submit the tattooed status
     async function submitTattooedStatus(dailyId, tattooedStatus) {
         const response = await fetch(`/api/getTattoo`, {
             method: "POST",
@@ -65,6 +62,7 @@
         } else {
             throw new Error("Failed to update the document.");
         }
+        alert("Updated");
     }
 
     const seed = 42;
@@ -124,6 +122,16 @@
         };
     }
 
+    function calculateRealAverages(data) {
+        const averages = {};
+        const keys = ["temp", "uv", "wrain_piezo", "humidity", "windspeed"];
+        keys.forEach((key) => {
+            averages[key] =
+                data.reduce((sum, item) => sum + item[key], 0) / data.length;
+        });
+        return averages;
+    }
+
     async function fetchRecentData() {
         const response = await fetch(
             "https://zku-middleware.vercel.app/api/recent",
@@ -132,8 +140,13 @@
         return json;
     }
 
+    function mapValue(value, inMin, inMax, outMin, outMax) {
+        return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+    }
+
     onMount(async () => {
         data = await fetchRecentData();
+        averages = calculateRealAverages(data);
     });
 
     $: tattoo = guessedData ? getClosestNumber(guessedData) : null;
@@ -141,7 +154,7 @@
 
 <article>
     <header>
-    <h1>Tattoo mantainance</h1>
+        <h1>Tattoo maintenance</h1>
     </header>
     <section class="input-section">
         <div>
@@ -160,8 +173,6 @@
         {/if}
 
         {#if documentData}
-            <!-- <p>Select tattoo number: <strong>{tattoo}</strong></p> -->
-
             <section class="data">
                 {#if data.length > 0}
                     <div>
@@ -171,7 +182,76 @@
                 {/if}
             </section>
 
-            <div>
+            <div class="comparison">
+                <ul class="comparison-list">
+                    <li
+                        style="border-bottom: 1px solid; padding-bottom:10px;  margin-bottom:10px"
+                    >
+                        <span>Comparison</span>
+                        <span>Guessed</span>
+                        <span>Accurate</span>
+                    </li>
+                    <li>
+                        <span class="label">Temp:</span>
+                        <span class="guessed"
+                            >{parseInt(
+                                mapValue(guessedData?.temp, 0.1, 1, 0, 40),
+                            )}°</span
+                        >
+                        <span class="real"> {averages.temp.toFixed(2)}°</span>
+                    </li>
+                    <li>
+                        <span class="label">UV:</span>
+                        <span class="guessed"
+                            >{parseInt(
+                                mapValue(guessedData?.uv, 0.1, 1, 0, 11),
+                            )}</span
+                        >
+                        <span class="real"> {averages.uv.toFixed(2)} UV</span>
+                    </li>
+                    <li>
+                        <span class="label">Rain:</span>
+                        <span class="guessed"
+                            >{parseInt(
+                                mapValue(
+                                    guessedData?.wrain_piezo,
+                                    0.1,
+                                    1,
+                                    0,
+                                    100,
+                                ),
+                            )} mm/h</span
+                        >
+                        <span class="real">
+                            {averages.wrain_piezo.toFixed(2)} mm/h</span
+                        >
+                    </li>
+                    <li>
+                        <span class="label">Humidity:</span>
+                        <span class="guessed"
+                            >{parseInt(
+                                mapValue(guessedData?.humidity, 0.1, 1, 0, 100),
+                            )} %</span
+                        >
+                        <span class="real">
+                            {averages.humidity.toFixed(2)} %</span
+                        >
+                    </li>
+                    <li>
+                        <span class="label">Wind:</span>
+                        <span class="guessed"
+                            >{parseInt(
+                                mapValue(guessedData?.windspeed, 0.1, 1, 0, 70),
+                            )} m/s</span
+                        >
+                        <span class="real">
+                            {averages.windspeed.toFixed(2)} m/s</span
+                        >
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tattoed">
                 <label>
                     <input type="checkbox" bind:checked={tattooed} />
                     Mark as Tattooed
@@ -179,7 +259,6 @@
                 <br />
                 <button on:click={submitTattooed}>Update</button>
             </div>
-            <pre>{JSON.stringify(guessedData, null, 2)}</pre>
         {/if}
     </section>
 </article>
@@ -246,5 +325,37 @@
 
     .viz-section {
         margin-top: 20px;
+    }
+
+    .comparison-list {
+        list-style-type: none;
+        padding: 0;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .comparison-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+    }
+
+    .label,
+    li > span {
+        font-weight: bold;
+        flex: 1;
+    }
+
+    .guessed {
+        flex: 1;
+        text-align: right;
+        color: #ff8c00; /* orange for guessed */
+    }
+
+    .real {
+        flex: 1;
+        text-align: right;
+        color: #4682b4; /* blue for real */
     }
 </style>

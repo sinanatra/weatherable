@@ -5,13 +5,22 @@
     let documents = [];
     let error = null;
     let data = [];
+    let currentPage = 0;
+    const pages = [
+        "https://zku-experiments.vercel.app/page_1",
+        "https://zku-experiments.vercel.app/page_3",
+        "https://zku-experiments.vercel.app/page_4",
+    ];
+    let hasRecentDocs = false;
+
+    const checkIntervalMs = 15000; // Check every 15 seconds
+    const recentDuration = 10; // 10 minutes
 
     async function fetchNonTattooedDocuments() {
         try {
             const response = await fetch("/api/getNonTattooed");
             if (response.ok) {
                 const newDocuments = await response.json();
-
                 if (
                     JSON.stringify(newDocuments) !== JSON.stringify(documents)
                 ) {
@@ -35,7 +44,7 @@
 
     function startPolling() {
         fetchNonTattooedDocuments();
-        setInterval(fetchNonTattooedDocuments, 600000);
+        setInterval(fetchNonTattooedDocuments, 10000);
     }
 
     function calculateAverage(item) {
@@ -68,8 +77,8 @@
 
             len: seededAverage || 0.5,
 
-            curveSmooth: document?.radio1 == "NW" || document?.radio1 == "NE",
-            outline: document?.radio1 == "SW" || document?.radio1 == "SE",
+            curveSmooth: ["N", "NNE", "NE", "ENE"].includes(document?.radio1),
+            outline: ["S", "SSW", "SW", "WSW"].includes(document?.radio1),
             mirror: document?.radio == "Yes",
 
             lineThickness: document?.lineThickness || 1,
@@ -77,38 +86,107 @@
         };
     }
 
+    function getTimestampFromObjectId(objectId) {
+        const timestamp = parseInt(objectId.substring(0, 8), 16) * 1000;
+        return new Date(timestamp);
+    }
+
+    function getWaitingTime(_id) {
+        const now = new Date();
+        const createdTime = getTimestampFromObjectId(_id);
+        return (now - createdTime) / (1000 * 60);
+    }
+
+    function checkRecentDocuments() {
+        hasRecentDocs = documents.some(
+            (doc) => getWaitingTime(doc._id) <= recentDuration,
+        );
+    }
+
+    function rotatePage() {
+        currentPage = (currentPage + 1) % pages.length;
+    }
+
     onMount(async () => {
         data = await fetchRecentData();
         startPolling();
+        checkRecentDocuments(); // Initial check
+        setInterval(rotatePage, 60000); // Change page every 60 seconds
+        setInterval(checkRecentDocuments, checkIntervalMs); // Check every 15 seconds
     });
 </script>
 
-<header>
-    <h1>Next tattoos</h1>
-    <p>3 minutes waiting on average...</p>
-</header>
-<article>
-    {#if error}
-        <p style="color: red;">{error}</p>
-    {/if}
-
-    {#if documents.length > 0}
-        {#each documents as doc}
-            {#if data.length > 0}
-                <section class="data">
-                    <h2>{doc.dailyId}</h2>
-                    <div>
-                        <Viz {data} guessedData={prepareGuessedData(doc)} invert={true} />
-                    </div>
-                </section>
+{#if documents.length > 0}
+    {#if hasRecentDocs}
+        <header>
+            <h1>Next tattoos</h1>
+            <p>3 minutes waiting time on average...</p>
+        </header>
+        <article>
+            {#if error}
+                <p style="color: red;">{error}</p>
             {/if}
-        {/each}
+
+            {#each documents as doc}
+                {#if data.length > 0}
+                    {#if getWaitingTime(doc._id) <= recentDuration}
+                        <section class="data">
+                            <h2>{doc.dailyId}</h2>
+                            <div>
+                                <Viz
+                                    {data}
+                                    guessedData={prepareGuessedData(doc)}
+                                    invert={true}
+                                />
+                            </div>
+                        </section>
+                    {/if}
+                {/if}
+            {/each}
+        </article>
+    {:else}
+        <div class="container">
+            <iframe src={pages[currentPage]} frameborder="0"></iframe>
+            <div class="next">
+                <h1>
+                    Fill out the questionnaire to get your personal ZK/U weather
+                    tattoo
+                </h1>
+            </div>
+        </div>
     {/if}
-</article>
+{/if}
 
 <style>
+    .container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .next {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: yellow;
+        font-size: 5vw;
+        line-height: 5vw;
+        text-align: center;
+        z-index: 10;
+    }
+
     article {
-        padding: 10px;
+        /* padding: 10px; */
     }
 
     header {
@@ -119,11 +197,11 @@
         justify-content: space-between;
         border-bottom: 1px dashed white;
         padding: 5px;
+        font-size: 42px;
     }
 
     header p {
         color: gray;
-        font-size: 16px;
         margin: 0;
         padding: 0;
     }
@@ -140,6 +218,11 @@
         position: relative;
         display: flex;
         justify-content: center;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    section:first-of-type h2 {
+        color: rgb(128, 255, 0);
     }
 
     h2 {
@@ -148,5 +231,6 @@
         margin: 0 auto;
         font-size: 13rem;
         color: yellow;
+        -webkit-text-stroke: 4px black;
     }
 </style>
