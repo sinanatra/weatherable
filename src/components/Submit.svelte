@@ -511,7 +511,7 @@
     }
 
     span {
-        font-size: 30px;
+        font-size: 40px;
         vertical-align: middle;
     }
 
@@ -557,12 +557,14 @@
         border: 1px solid #565656;
         color: yellow;
         font-size: 0.6em;
+        margin: 50px 0;
+        padding: 10px;
     }
 
     input[type="range"] {
         appearance: none;
         background: #565656;
-        height: 20px;
+        height: 30px;
         cursor: grab;
         accent-color: red;
     }
@@ -573,8 +575,8 @@
 
     input[type="range"]::-webkit-slider-thumb {
         appearance: none;
-        width: 20px;
-        height: 20px;
+        width: 30px;
+        height: 30px;
         background: yellow;
     }
 
