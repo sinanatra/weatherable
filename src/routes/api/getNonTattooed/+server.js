@@ -9,7 +9,7 @@ export async function GET() {
         const documents = await collection.find({
             tattooed: { $ne: true },
         })
-            .sort({ _id: -1 })
+            // .sort({ _id: -1 })
             .limit(n)
             .toArray();
 
