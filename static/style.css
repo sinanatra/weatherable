@@ -28,3 +28,10 @@ p {
     background-color: yellow;
     color: black;
 }
+
+@font-face {
+    font-family: "Arial Narrow";
+    src: url("./fonts/arialnarrow.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}

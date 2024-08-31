@@ -8,7 +8,7 @@ export const POST = async ({ request }) => {
             const collection = await db.collection('weatherables');
             const today = new Date().toISOString().split('T')[0];
             const countResult = await collection.countDocuments({ date: today });
-            data.dailyId = countResult;
+            data.dailyId = countResult + 1;
             data.date = today;
             await collection.insertOne(data);
 

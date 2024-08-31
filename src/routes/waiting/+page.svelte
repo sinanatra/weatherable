@@ -226,11 +226,14 @@
     }
 
     h2 {
+        font-family: Arial, Helvetica, sans-serif;
+        letter-spacing: -15px;
         position: absolute;
         top: 0;
         margin: 0 auto;
         font-size: 13rem;
         color: yellow;
-        -webkit-text-stroke: 4px black;
+        font-weight: 800;
+        -webkit-text-stroke: 5px black;
     }
 </style>
