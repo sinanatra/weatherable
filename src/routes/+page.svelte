@@ -1,6 +1,7 @@
 <header>
     <a href="/questionnaire">Start</a> —
     <a href="/last">Last Result</a> —
+    <a href="/away">Away</a> —
 </header>
 <header>
     <a href="/print">Print</a> —
