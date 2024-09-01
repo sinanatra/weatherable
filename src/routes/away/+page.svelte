@@ -14,7 +14,6 @@
     }
 
     onMount(async () => {
-        startPolling();
         setInterval(rotatePage, 30000);
     });
 </script>

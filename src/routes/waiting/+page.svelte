@@ -6,15 +6,33 @@
     let error = null;
     let data = [];
     let currentPage = 0;
+    // const pages = [
+    //     "https://zku-experiments.vercel.app/page_1",
+    //     "https://zku-experiments.vercel.app/page_3",
+    //     // "https://zku-experiments.vercel.app/page_4",
+    // ];
+    // const pages = [
+    //     "video/zku_1.mov",
+    //     "video/zku_4.mov",
+    //     "video/zku_3.mov",
+    //     "video/zku_7.mov",
+    //     "video/zku_5.mov",
+    //     "video/zku_8.mov",
+    //     "video/zku_2.mov",
+    //     "video/zku_6.mov",
+    // ];
+
     const pages = [
-        "https://zku-experiments.vercel.app/page_1",
-        "https://zku-experiments.vercel.app/page_3",
-        "https://zku-experiments.vercel.app/page_4",
+        "video/compressed_zku_rotate_1.mov",
+        "video/compressed_zku_rotate_2.mov",
+        "video/compressed_zku_rotate_3.mov",
+        "video/compressed_zku_rotate_4.mov",
     ];
+
     let hasRecentDocs = false;
 
     const checkIntervalMs = 15000; // Check every 15 seconds
-    const recentDuration = 10; // 10 minutes
+    const recentDuration = 20; // 10 minutes
 
     async function fetchNonTattooedDocuments() {
         try {
@@ -42,10 +60,10 @@
         return json;
     }
 
-    function startPolling() {
-        fetchNonTattooedDocuments();
-        setInterval(fetchNonTattooedDocuments, 10000);
-    }
+    // function startPolling() {
+    //     fetchNonTattooedDocuments();
+    //     setInterval(fetchNonTattooedDocuments, 10000);
+    // }
 
     function calculateAverage(item) {
         const ranges = [
@@ -109,10 +127,13 @@
 
     onMount(async () => {
         data = await fetchRecentData();
-        startPolling();
-        checkRecentDocuments(); // Initial check
-        setInterval(rotatePage, 60000); // Change page every 60 seconds
-        setInterval(checkRecentDocuments, checkIntervalMs); // Check every 15 seconds
+        setInterval(rotatePage, checkIntervalMs);
+
+        fetchNonTattooedDocuments();
+        checkRecentDocuments();
+
+        setInterval(fetchNonTattooedDocuments, 10000);
+        setInterval(checkRecentDocuments, checkIntervalMs);
     });
 </script>
 
@@ -146,7 +167,8 @@
         </article>
     {:else}
         <div class="container">
-            <iframe src={pages[currentPage]} frameborder="0"></iframe>
+            <!-- <iframe src={pages[currentPage]} frameborder="0"></iframe> -->
+            <video autoplay mute loop src={pages[currentPage]}></video>
             <div class="next">
                 <h1>
                     Fill out the questionnaire to get your personal ZK/U weather
@@ -164,13 +186,15 @@
         height: 100vh;
     }
 
-    iframe {
+    iframe,
+    video {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         border: none;
+        object-fit: cover;
     }
 
     .next {

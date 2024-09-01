@@ -3,6 +3,8 @@ node_modules
 /build
 /.svelte-kit
 /package
+/static/hd
+/static/video
 .env
 .env.*
 !.env.example
