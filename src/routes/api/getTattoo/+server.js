@@ -10,8 +10,8 @@ export async function GET({ url }) {
 
     try {
         const collection = await db.collection("weatherables");
-        const document = await collection.findOne({ dailyId, date: today });
-        // const document = await collection.findOne({ dailyId });
+        // const document = await collection.findOne({ dailyId, date: today });
+        const document = await collection.findOne({ dailyId });
 
         if (!document) {
             return new Response(JSON.stringify({ error: "Document not found" }), { status: 404 });

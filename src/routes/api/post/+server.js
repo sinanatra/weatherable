@@ -8,8 +8,9 @@ export const POST = async ({ request }) => {
             const collection = await db.collection('weatherables');
             const today = new Date().toISOString().split('T')[0];
 
-
-            const lastDocument = await collection.find({ date: today })
+            const lastDocument = await collection
+                .find({})
+                // .find({ date: today })
                 .sort({ dailyId: -1 })
                 .limit(1)
                 .toArray();
