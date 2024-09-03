@@ -7,10 +7,20 @@ export const POST = async ({ request }) => {
         if (data.answer) {
             const collection = await db.collection('weatherables');
             const today = new Date().toISOString().split('T')[0];
-            // const countResult = await collection.countDocuments({ date: today });
-            const countResult =  await collection.countDocuments();
 
-            data.dailyId = countResult + 1;
+
+            const lastDocument = await collection.find({ date: today })
+                .sort({ dailyId: -1 })
+                .limit(1)
+                .toArray();
+
+            let newDailyId = 1;
+
+            if (lastDocument.length > 0) {
+                newDailyId = lastDocument[0].dailyId + 1;
+            }
+
+            data.dailyId = newDailyId;
             data.date = today;
 
             await collection.insertOne(data);
