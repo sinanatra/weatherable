@@ -22,10 +22,9 @@
     <iframe src={pages[currentPage]} frameborder="0"></iframe>
     <div class="next">
         <h1>
-            ☁️☁️☁️ <br />We are away. <br />Tattoo sessions are between 10-12
-            and 16-18
-            <br />⛅⛅⛅
+            ☁️☁️☁️ <br />Tattoo sessions are between 10-12 and 16-18
         </h1>
+        <p>Feel free to fill the questionnaire in the meantime</p>
     </div>
 </div>
 
@@ -51,10 +50,14 @@
         left: 50%;
         transform: translate(-50%, -50%);
         color: yellow;
-        font-size: 5vw;
-        line-height: 5vw;
+
         text-align: center;
         z-index: 10;
+    }
+
+    .next h1 {
+        font-size: 5vw;
+        line-height: 5vw;
     }
 
     h1 {

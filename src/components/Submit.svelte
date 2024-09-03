@@ -78,7 +78,7 @@
                 name="answer"
                 id="answer"
                 bind:value={text}
-                maxlength="640"
+                maxlength="240"
                 lines="1"
                 placeholder="write here..."
                 required
@@ -545,7 +545,7 @@
     textarea,
     input[type="range"] {
         width: 80%;
-        height: 250px;
+        height: 150px;
         font-size: 1em;
         resize: none;
         font-family: sans-serif;

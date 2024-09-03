@@ -6,11 +6,19 @@
     let error = null;
     let data = [];
     let currentPage = 0;
-    // const pages = [
-    //     "https://zku-experiments.vercel.app/page_1",
-    //     "https://zku-experiments.vercel.app/page_3",
-    //     // "https://zku-experiments.vercel.app/page_4",
-    // ];
+
+    let hasRecentDocs = false;
+
+    const checkIntervalMs = 15000; // Check every 15 seconds
+    const recentDuration = 20; // N minutes
+
+    const pages = [
+        "https://zku-experiments.vercel.app/page_1",
+        "https://zku-experiments.vercel.app/page_3",
+        "https://metalab.kimalbrecht.com/33-up-dates-on-weather/01-experiments/02-scatter/05-box.html",
+        // "https://zku-experiments.vercel.app/page_4",
+    ];
+
     // const pages = [
     //     "video/zku_1.mov",
     //     "video/zku_4.mov",
@@ -22,17 +30,12 @@
     //     "video/zku_6.mov",
     // ];
 
-    const pages = [
-        "video/compressed_zku_rotate_1.mov",
-        "video/compressed_zku_rotate_2.mov",
-        "video/compressed_zku_rotate_3.mov",
-        "video/compressed_zku_rotate_4.mov",
-    ];
-
-    let hasRecentDocs = false;
-
-    const checkIntervalMs = 15000; // Check every 15 seconds
-    const recentDuration = 20; // 10 minutes
+    // const pages = [
+    //     "video/compressed_zku_rotate_1.mov",
+    //     "video/compressed_zku_rotate_2.mov",
+    //     "video/compressed_zku_rotate_3.mov",
+    //     "video/compressed_zku_rotate_4.mov",
+    // ];
 
     async function fetchNonTattooedDocuments() {
         try {
@@ -50,6 +53,7 @@
         } catch (err) {
             error = err.message;
         }
+        checkRecentDocuments();
     }
 
     async function fetchRecentData() {
@@ -130,10 +134,7 @@
         setInterval(rotatePage, checkIntervalMs);
 
         fetchNonTattooedDocuments();
-        checkRecentDocuments();
-
-        setInterval(fetchNonTattooedDocuments, 10000);
-        setInterval(checkRecentDocuments, checkIntervalMs);
+        setInterval(fetchNonTattooedDocuments, checkIntervalMs);
     });
 </script>
 
@@ -167,8 +168,8 @@
         </article>
     {:else}
         <div class="container">
-            <!-- <iframe src={pages[currentPage]} frameborder="0"></iframe> -->
-            <video autoplay mute loop src={pages[currentPage]}></video>
+            <iframe src={pages[currentPage]} frameborder="0"></iframe>
+            <!-- <video autoplay mute loop src={pages[currentPage]}></video> -->
             <div class="next">
                 <h1>
                     Fill out the questionnaire to get your personal ZK/U weather
