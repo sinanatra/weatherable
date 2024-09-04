@@ -174,7 +174,7 @@
                 <h1>
                     Fill out the questionnaire to get your personal ZK/U weather
                     tattoo
-                </h1>
+                </h1>wea
             </div>
         </div>
     {/if}
@@ -182,12 +182,12 @@
     <div class="container">
         <iframe src={pages[currentPage]} frameborder="0"></iframe>
         <!-- <video autoplay mute loop src={pages[currentPage]}></video> -->
-        <!-- <div class="next">
+        <div class="next">
             <h1>
                 Fill out the questionnaire to get your personal ZK/U weather
                 tattoo
             </h1>
-        </div> -->
+        </div>
     </div>
 {/if}
 
@@ -258,7 +258,7 @@
     }
 
     section:first-of-type h2 {
-        color: rgb(128, 255, 0);
+        /* color: rgb(128, 255, 0); */
     }
 
     h2 {

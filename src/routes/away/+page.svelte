@@ -6,7 +6,7 @@
     const pages = [
         "https://zku-experiments.vercel.app/page_1",
         "https://zku-experiments.vercel.app/page_3",
-        "https://zku-experiments.vercel.app/page_4",
+        // "https://zku-experiments.vercel.app/page_4",
     ];
 
     function rotatePage() {

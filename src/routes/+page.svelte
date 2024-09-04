@@ -5,7 +5,7 @@
 </header>
 <header>
     <a href="/print">Print</a> —
-    <a href="/mantainance">Tattoo Mantainance</a> —
+    <a href="/maintenance">Tattoo Maintenance</a> —
     <a href="/waiting">Who's next?</a>
 </header>
 
