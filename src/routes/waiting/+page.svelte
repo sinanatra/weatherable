@@ -178,6 +178,17 @@
             </div>
         </div>
     {/if}
+{:else}
+    <div class="container">
+        <iframe src={pages[currentPage]} frameborder="0"></iframe>
+        <!-- <video autoplay mute loop src={pages[currentPage]}></video> -->
+        <!-- <div class="next">
+            <h1>
+                Fill out the questionnaire to get your personal ZK/U weather
+                tattoo
+            </h1>
+        </div> -->
+    </div>
 {/if}
 
 <style>
