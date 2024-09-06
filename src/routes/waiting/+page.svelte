@@ -1,6 +1,7 @@
 <script>
     import Viz from "@components/Viz.svelte";
     import { onMount } from "svelte";
+    import * as d3 from "d3";
 
     let documents = [];
     let error = null;
@@ -56,11 +57,29 @@
     }
 
     async function fetchRecentData() {
-        const response = await fetch(
-            "https://zku-middleware.vercel.app/api/recent",
-        );
-        const json = await response.json();
-        return json;
+        try {
+            const response = await fetch(
+                "https://zku-middleware.vercel.app/api/recent",
+            );
+
+            if (!response.ok) {
+                throw new Error("API response was not ok");
+            }
+
+            const json = await response.json();
+            return json;
+        } catch (error) {
+            console.error("API request failed, falling back to CSV:", error);
+            try {
+                const csvData = await d3.csv(
+                    "/data/zku_weatherstation_main_hour.csv",
+                );
+                return csvData;
+            } catch (csvError) {
+                console.error("Failed to load CSV file as fallback:", csvError);
+                return null;
+            }
+        }
     }
 
     // function startPolling() {
