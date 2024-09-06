@@ -6,8 +6,12 @@
 <header>
     <a href="/print">Print</a> —
     <a href="/maintenance">Tattoo Maintenance</a> —
-    <a href="/waiting">Who's next?</a>
 </header>
+<header>
+    <a href="/waiting">Who's next?</a> —
+    <a href="/waiting2">Who's next? but video</a>
+</header>
+
 
 <style>
     header {

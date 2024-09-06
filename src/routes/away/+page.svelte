@@ -21,9 +21,7 @@
 <div class="container">
     <iframe src={pages[currentPage]} frameborder="0"></iframe>
     <div class="next">
-        <h1>
-            ☁️☁️☁️ <br />Tattoo sessions are between 10-12 and 16-18
-        </h1>
+        <h1>Tattoo sessions are between 10-12 and 16-18</h1>
         <p>Feel free to fill the questionnaire in the meantime</p>
     </div>
 </div>
@@ -44,20 +42,21 @@
         border: none;
     }
 
+   
     .next {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: yellow;
+        top: 40%;
+        left: 0%;
 
+        padding: 10vw;
+        color: yellow;
         text-align: center;
         z-index: 10;
     }
 
     .next h1 {
-        font-size: 5vw;
-        line-height: 5vw;
+        font-size: 8vw;
+        line-height: 8vw;
     }
 
     h1 {

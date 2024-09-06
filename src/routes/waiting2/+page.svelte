@@ -13,28 +13,11 @@
     const recentDuration = 20; // N minutes
 
     const pages = [
-        "https://zku-experiments.vercel.app/page_1",
-        "https://zku-experiments.vercel.app/page_3",
-        "https://zku-experiments.vercel.app/page_4",
+        "video/compressed_zku_rotate_1.mov",
+        "video/compressed_zku_rotate_2.mov",
+        "video/compressed_zku_rotate_3.mov",
+        "video/compressed_zku_rotate_4.mov",
     ];
-
-    // const pages = [
-    //     "video/zku_1.mov",
-    //     "video/zku_4.mov",
-    //     "video/zku_3.mov",
-    //     "video/zku_7.mov",
-    //     "video/zku_5.mov",
-    //     "video/zku_8.mov",
-    //     "video/zku_2.mov",
-    //     "video/zku_6.mov",
-    // ];
-
-    // const pages = [
-    //     "video/compressed_zku_rotate_1.mov",
-    //     "video/compressed_zku_rotate_2.mov",
-    //     "video/compressed_zku_rotate_3.mov",
-    //     "video/compressed_zku_rotate_4.mov",
-    // ];
 
     async function fetchNonTattooedDocuments() {
         try {
@@ -130,7 +113,7 @@
 
     onMount(async () => {
         data = await fetchRecentData();
-        setInterval(rotatePage, 60000);
+        setInterval(rotatePage, checkIntervalMs);
 
         fetchNonTattooedDocuments();
         setInterval(fetchNonTattooedDocuments, checkIntervalMs);
@@ -167,8 +150,7 @@
         </article>
     {:else}
         <div class="container">
-            <iframe src={pages[currentPage]} frameborder="0"></iframe>
-            <!-- <video autoplay mute loop src={pages[currentPage]}></video> -->
+            <video autoplay muted loop src={pages[currentPage]}></video>
             <div class="next">
                 <h1>
                     Fill out the questionnaire to get your personal ZK/U weather
@@ -179,8 +161,7 @@
     {/if}
 {:else}
     <div class="container">
-        <iframe src={pages[currentPage]} frameborder="0"></iframe>
-        <!-- <video autoplay mute loop src={pages[currentPage]}></video> -->
+        <video autoplay muted loop src={pages[currentPage]}></video>
         <div class="next">
             <h1>
                 Fill out the questionnaire to get your personal ZK/U weather
