@@ -3,6 +3,7 @@
     import { goto } from "$app/navigation";
 
     export let currentInput;
+    export let language; 
 
     $: text = currentInput?.answer ? currentInput.answer : "";
     $: range = currentInput?.range ? currentInput.range : 0.1;
@@ -10,7 +11,6 @@
     $: range2 = currentInput?.range2 ? currentInput.range2 : 0.1;
     $: range3 = currentInput?.range3 ? currentInput.range3 : 0.1;
     $: range4 = currentInput?.range4 ? currentInput.range4 : 0.1;
-    // $: range5 = currentInput?.range5 ? currentInput.range5 : 0.1;
 
     $: radio = currentInput?.radio ? currentInput.radio : "";
     $: radio1 = currentInput?.radio1 ? currentInput.radio1 : "";
@@ -23,7 +23,11 @@
 
     const handleSubmit = async () => {
         if (!text.trim()) {
-            alert("Text field cannot be empty");
+            alert(
+                language === "EN"
+                    ? "Text field cannot be empty"
+                    : "Textfeld darf nicht leer sein",
+            );
             return;
         }
 
@@ -41,7 +45,6 @@
                 range2,
                 range3,
                 range4,
-                // range5,
             }),
         });
 
@@ -49,10 +52,18 @@
         const success = responses.every((response) => response.ok);
 
         if (success) {
-            console.log("Data submitted successfully.");
+            console.log(
+                language === "EN"
+                    ? "Data submitted successfully."
+                    : "Daten erfolgreich übermittelt.",
+            );
             goto(`/last`);
         } else {
-            console.error("Failed to submit data.");
+            console.error(
+                language === "EN"
+                    ? "Failed to submit data."
+                    : "Datenübermittlung fehlgeschlagen.",
+            );
         }
     };
 
@@ -68,80 +79,99 @@
 
 <article>
     <p style="margin-top: 10rem;">
-        Scroll down and fill out the questionnaire to get your personal ZK/U
-        weather tattoo
+        {#if language === "EN"}
+            Scroll down and fill out the questionnaire to get your personal ZK/U
+            weather tattoo
+        {:else}
+        Scrolle nach unten und beantworte Fragebogen, um dein persönliches ZK/U Wetter-Tattoo zu erhalten
+        {/if}
     </p>
     <section dir="ltr">
         <div class="input-group">
-            <h2>Which mood do you associate with the current weather?</h2>
+            <h2>
+                {language === "EN"
+                    ? "Which mood do you associate with the current weather?"
+                    : "Welche Stimmung verbindest du mit dem aktuellen Wetter?"}
+            </h2>
             <textarea
                 name="answer"
                 id="answer"
                 bind:value={text}
                 maxlength="240"
                 lines="1"
-                placeholder="write here..."
+                placeholder={language === "EN"
+                    ? "write here..."
+                    : "hier schreiben..."}
                 required
                 on:input={handleChange}
             ></textarea>
         </div>
 
         <div class="input-group">
-            <h2>How warm does it feel outside right now?</h2>
-            <span
-                >-
-                <input
+            <h2>
+                {language === "EN"
+                    ? "How warm does it feel outside right now?"
+                    : "Wie warm fühlt es sich gerade draußen an?"}
+            </h2>
+            <span>
+                -<input
                     type="range"
                     bind:value={range}
                     min="0.1"
                     max="1"
                     step="0.01"
                     on:input={handleChange}
-                />
-                +
+                />+
             </span>
-            <span>
-                {parseInt(mapValue(range, 0.1, 1, 0, 40))}°
-            </span>
+            <span>{parseInt(mapValue(range, 0.1, 1, 0, 40))}°</span>
         </div>
 
         <div class="input-group">
-            <h2>How does the sun's intensity feel today?</h2>
-            <span
-                >- <input
+            <h2>
+                {language === "EN"
+                    ? "How does the sun's intensity feel today?"
+                    : "Wie intensiv fühlt sich die Sonne heute an?"}
+            </h2>
+            <span>
+                -<input
                     type="range"
                     bind:value={range1}
                     min="0.1"
                     max="1"
                     step="0.01"
                     on:input={handleChange}
-                /> +
+                />+
             </span>
-            <span>
-                {parseInt(mapValue(range1, 0.1, 1, 0, 11))} UV
-            </span>
+            <span>{parseInt(mapValue(range1, 0.1, 1, 0, 11))} UV</span>
         </div>
+
         <div class="input-group">
-            <h2>How much rain do you think has fallen over the past week?</h2>
-            <span
-                >- <input
+            <h2>
+                {language === "EN"
+                    ? "How much rain do you think has fallen over the past week?"
+                    : "Was glaubst du, wie viel Regen in der letzten Woche gefallen ist?"}
+            </h2>
+            <span>
+                -<input
                     type="range"
                     bind:value={range2}
                     min="0.1"
                     max="1"
                     step="0.01"
                     on:input={handleChange}
-                /> +
+                />+
             </span>
-            <span>
-                {parseInt(mapValue(range2, 0.1, 1, 0, 100))} mm/h
-            </span>
+            <span>{parseInt(mapValue(range2, 0.1, 1, 0, 100))} mm/h</span>
         </div>
 
         <div class="input-group">
-            <h2>How humid does the air feel today?</h2>
-            <span
-                >- <input
+            <h2>
+                {language === "EN"
+                    ? "How humid does the air feel today?"
+                    : "Wie feucht fühlt sich die Luft heute an?"}
+            </h2>
+            <span>
+                -<input
                     type="range"
                     bind:value={range3}
                     min="0.1"
@@ -150,12 +180,15 @@
                     on:input={handleChange}
                 />+
             </span>
-            <span>
-                {parseInt(mapValue(range3, 0.1, 1, 0, 100))} %
-            </span>
+            <span>{parseInt(mapValue(range3, 0.1, 1, 0, 100))}%</span>
         </div>
+
         <div class="input-group">
-            <h2>In which direction do you think that the wind is blowing?</h2>
+            <h2>
+                {language === "EN"
+                    ? "In which direction do you think the wind is blowing?"
+                    : "Was glaubst du, in welche Richtung der Wind gerade weht?"}
+            </h2>
             <div class="wind-direction">
                 <svg viewBox="0 0 600 600" class="arrows">
                     <defs>
@@ -202,7 +235,6 @@
                             />
                         </marker>
                     </defs>
-                    <!-- Lines with arrowheads -->
                     <line
                         id="arrow-N"
                         x1="250"
@@ -395,82 +427,63 @@
                         on:click={() => handleDirectionChange("NNW")}
                         class:selected={radio1 === "NNW"}
                     />
-                    <!-- Directional Labels -->
-                    <text
-                        x="250"
-                        y="20"
-                        text-anchor="middle"
-                        fill="white"
-                        font-size="16">N</text
-                    >
-                    <text
-                        x="490"
-                        y="260"
-                        text-anchor="middle"
-                        fill="white"
-                        font-size="16">E</text
-                    >
-                    <text
-                        x="250"
-                        y="510"
-                        text-anchor="middle"
-                        fill="white"
-                        font-size="16">S</text
-                    >
-                    <text
-                        x="10"
-                        y="260"
-                        text-anchor="middle"
-                        fill="white"
-                        font-size="16">W</text
-                    >
                 </svg>
             </div>
-            <div class="input-group">
-                <h2>How strong do you sense the wind today?</h2>
-                <span
-                    >-<input
-                        type="range"
-                        bind:value={range4}
-                        min="0.1"
-                        max="1"
-                        step="0.01"
-                        on:input={handleChange}
-                    />+
-                </span>
-                <span>
-                    {parseInt(mapValue(range4, 0.1, 1, 0, 70))} m/s
-                </span>
-            </div>
-
-            <div class="input-group">
-                <h2>Were you checking today's weather forecast?</h2>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={radio}
-                        value={"Yes"}
-                        on:change={handleChange}
-                    />
-                    Yes
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={radio}
-                        value={"No"}
-                        on:change={handleChange}
-                    />
-                    No
-                </label>
-            </div>
-
-            {#if !text || !radio || !radio1}
-                <button disabled>Submit</button>
-            {:else}
-                <button on:click={handleSubmit}>Submit</button>
-            {/if}
         </div>
+
+        <div class="input-group">
+            <h2>
+                {language === "EN"
+                    ? "How strong do you sense the wind today?"
+                    : "Wie kräftig fühlt sich der Wind heute an?"}
+            </h2>
+            <span>
+                -<input
+                    type="range"
+                    bind:value={range4}
+                    min="0.1"
+                    max="1"
+                    step="0.01"
+                    on:input={handleChange}
+                />+
+            </span>
+            <span>{parseInt(mapValue(range4, 0.1, 1, 0, 70))} m/s</span>
+        </div>
+
+        <div class="input-group">
+            <h2>
+                {language === "EN"
+                    ? "Were you checking today's weather forecast?"
+                    : "Hast du heute die Wettervorhersage überprüft?"}
+            </h2>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio}
+                    value={"Yes"}
+                    on:change={handleChange}
+                />
+                {language === "EN" ? "Yes" : "Ja"}
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    bind:group={radio}
+                    value={"No"}
+                    on:change={handleChange}
+                />
+                {language === "EN" ? "No" : "Nein"}
+            </label>
+        </div>
+
+        {#if !text || !radio || !radio1}
+            <button disabled>{language === "EN" ? "Submit" : "Absenden"}</button
+            >
+        {:else}
+            <button on:click={handleSubmit}
+                >{language === "EN" ? "Submit" : "Absenden"}</button
+            >
+        {/if}
     </section>
 </article>
 
@@ -501,13 +514,6 @@
     h3 {
         font-weight: normal;
         margin: 5px;
-
-        /* background-color: #565656; */
-        /* color: transparent; */
-        /* text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5); */
-        /* -webkit-background-clip: text;
-        -moz-background-clip: text;
-        background-clip: text; */
     }
 
     span {
@@ -536,7 +542,7 @@
 
     h2 {
         font-size: 1.25em;
-        line-height: 0.8em;
+        line-height: 0.95em;
         transform: scaleY(1.2);
         transform-origin: bottom;
         margin-bottom: 30px;

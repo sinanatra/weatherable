@@ -10,6 +10,7 @@
 
     let data = [];
     let currentInput = { answer: "", radio: 0, range: 0, range1: 0 };
+    let language = "EN";
 
     onMount(async () => {
         data = await fetchData();
@@ -46,30 +47,47 @@
         });
         requestAnimationFrame(tick);
     };
+
+    function switchLanguage(lang) {
+        language = lang;
+    }
 </script>
 
 <article>
     <section class="form">
+        <div class="language-switcher">
+            <button
+                on:click={() => switchLanguage("EN")}
+                class:active={language === "EN"}>EN</button
+            >
+            <button
+                on:click={() => switchLanguage("DE")}
+                class:active={language === "DE"}>DE</button
+            >
+        </div>
         <div class="screen" id="fold-effect">
             <div class="wrapper-3d">
                 <div class="fold fold-top">
                     <div class="fold-align">
                         <div class="fold-content">
-                            <Submit {currentInput} />
+                            <Submit {currentInput} {language} />
                         </div>
                     </div>
                 </div>
                 <div class="fold fold-center" bind:this={centerFold}>
                     <div class="fold-align">
-                        <div class="fold-content stick" bind:this={centerContent}>
-                            <Submit on:change={handleChange} />
+                        <div
+                            class="fold-content stick"
+                            bind:this={centerContent}
+                        >
+                            <Submit on:change={handleChange} {language} />
                         </div>
                     </div>
                 </div>
                 <div class="fold fold-bottom">
                     <div class="fold-align">
                         <div class="fold-content">
-                            <Submit {currentInput} />
+                            <Submit {currentInput} {language} />
                         </div>
                     </div>
                 </div>
@@ -121,6 +139,7 @@
         left: 0;
         top: 100%;
     }
+
     .fold-align {
         width: 100%;
         height: 100%;
@@ -129,6 +148,7 @@
     .fold-bottom .fold-align {
         transform: translateY(-100%);
     }
+
     .fold-top .fold-align {
         transform: translateY(100%);
     }
@@ -141,5 +161,26 @@
     .fold-top {
         transform-origin: bottom center;
         transform: rotateX(-110deg);
+    }
+
+    .language-switcher {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .language-switcher button {
+        padding: 0.5rem 1rem;
+        margin: 0 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: 1px solid #fff;
+        color: #fff;
+    }
+
+    .language-switcher button.active {
+        background-color: yellow;
+        color: black;
     }
 </style>
