@@ -500,7 +500,7 @@
         background-color: black;
         color: rgba(255, 255, 255, 0.5);
         margin: 0;
-        font-size: 6vw;
+        font-size: 4vw;
         line-height: 1.2em;
 
         text-rendering: optimizeLegibility;
@@ -610,7 +610,7 @@
     button {
         display: block;
         margin: 0 auto;
-        font-size: 220px;
+        font-size: 190px;
         cursor: pointer;
         margin-bottom: 200px;
     }
@@ -631,7 +631,7 @@
 
     .arrows line {
         cursor: pointer;
-        stroke-width: 10;
+        stroke-width: 12;
         stroke: #bcbcbc;
     }
 

@@ -21,8 +21,7 @@
 <div class="container">
     <iframe src={pages[currentPage]} frameborder="0"></iframe>
     <div class="next">
-        <h1>Tattoo sessions are between 10-12 and 16-18</h1>
-        <p>Feel free to fill the questionnaire in the meantime</p>
+        <h1>Tattoo sessions are between 17-19</h1>
     </div>
 </div>
 
