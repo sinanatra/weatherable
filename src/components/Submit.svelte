@@ -83,7 +83,7 @@
             Scroll down and fill out the questionnaire to get your personal ZK/U
             weather tattoo
         {:else}
-        Scrolle nach unten und beantworte Fragebogen, um dein persönliches ZK/U Wetter-Tattoo zu erhalten
+        Scrolle nach unten und beantworte den Fragebogen, um dein persönliches ZK/U Wetter-Tattoo zu erhalten
         {/if}
     </p>
     <section dir="ltr">
