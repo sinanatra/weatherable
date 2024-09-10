@@ -103,8 +103,26 @@
 
             len: seededAverage || 0.5,
 
-            curveSmooth: ["N", "NNE", "NE", "ENE"].includes(guessed[0]?.radio1),
-            outline: ["S", "SSW", "SW", "WSW"].includes(guessed[0]?.radio1),
+            curveSmooth: [
+                "N",
+                "NNE",
+                "NE",
+                "ENE",
+                "E",
+                "ESE",
+                "SE",
+                "SSE",
+            ].includes(guessed[0]?.radio1),
+            outline: [
+                "S",
+                "SSW",
+                "SW",
+                "WSW",
+                "W",
+                "NW",
+                "WNW",
+                "NNW",
+            ].includes(guessed[0]?.radio1),
             mirror: guessed[0]?.radio == "Yes",
 
             lineThickness: guessed[0]?.lineThickness || 1,
@@ -113,7 +131,6 @@
     }
 
     onMount(async () => {
-        
         guessed = await fetchData();
         // data = await fetchWeatherData();
         data = await fetchRecentData();
