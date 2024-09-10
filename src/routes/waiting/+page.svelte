@@ -149,7 +149,7 @@
 
     onMount(async () => {
         data = await fetchRecentData();
-        setInterval(rotatePage, 60000);
+        setInterval(rotatePage, 120000);
 
         fetchNonTattooedDocuments();
         setInterval(fetchNonTattooedDocuments, checkIntervalMs);
