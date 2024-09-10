@@ -14,7 +14,7 @@
     }
 
     onMount(async () => {
-        setInterval(rotatePage, 30000);
+        setInterval(rotatePage, 120000);
     });
 </script>
 
