@@ -109,7 +109,7 @@
                 "ESE",
                 "SE",
                 "SSE",
-            ].includes(guessed[0]?.radio1),
+            ].includes(document?.radio1),
             outline: [
                 "S",
                 "SSW",
@@ -119,7 +119,7 @@
                 "NW",
                 "WNW",
                 "NNW",
-            ].includes(guessed[0]?.radio1),
+            ].includes(document?.radio1),
             mirror: document?.radio == "Yes",
 
             lineThickness: document?.lineThickness || 1,
