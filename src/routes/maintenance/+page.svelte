@@ -113,8 +113,26 @@
 
             len: seededAverage || 0.5,
 
-            curveSmooth: ["N", "NNE", "NE", "ENE"].includes(document?.radio1),
-            outline: ["S", "SSW", "SW", "WSW"].includes(document?.radio1),
+            curveSmooth: [
+                "N",
+                "NNE",
+                "NE",
+                "ENE",
+                "E",
+                "ESE",
+                "SE",
+                "SSE",
+            ].includes(document?.radio1),
+            outline: [
+                "S",
+                "SSW",
+                "SW",
+                "WSW",
+                "W",
+                "NW",
+                "WNW",
+                "NNW",
+            ].includes(document?.radio1),
 
             mirror: document?.radio == "Yes",
 
