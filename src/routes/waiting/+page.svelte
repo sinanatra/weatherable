@@ -285,13 +285,14 @@
 
     h2 {
         font-family: Arial, Helvetica, sans-serif;
-        letter-spacing: -15px;
+        /* letter-spacing: -15px; */
         position: absolute;
         top: 0;
         margin: 0 auto;
         font-size: 13rem;
         color: yellow;
         font-weight: 800;
-        -webkit-text-stroke: 5px black;
+        -webkit-text-stroke: 3px black;
+        
     }
 </style>
