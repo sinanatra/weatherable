@@ -201,6 +201,9 @@
                 {/if}
             </div>
         {/each}
+        <h1 class="date">
+            {$selectedDate} / {$selectedHour}
+        </h1>
     </section>
 </article>
 
@@ -251,7 +254,7 @@
         width: 33.33%;
     } */
 
-    .visualization {
+    .visualization, .date {
         display: flex;
         align-items: center;
         justify-content: center;
