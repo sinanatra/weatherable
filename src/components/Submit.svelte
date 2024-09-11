@@ -3,7 +3,7 @@
     import { goto } from "$app/navigation";
 
     export let currentInput;
-    export let language; 
+    export let language;
 
     $: text = currentInput?.answer ? currentInput.answer : "";
     $: range = currentInput?.range ? currentInput.range : 0.1;
@@ -83,7 +83,8 @@
             Scroll down and fill out the questionnaire to get your personal ZK/U
             weather tattoo
         {:else}
-        Scrolle nach unten und beantworte den Fragebogen, um dein persönliches ZK/U Wetter-Tattoo zu erhalten
+            Scrolle nach unten und beantworte den Fragebogen, um dein
+            persönliches ZK/U Wetter-Tattoo zu erhalten
         {/if}
     </p>
     <section dir="ltr">
@@ -427,6 +428,10 @@
                         on:click={() => handleDirectionChange("NNW")}
                         class:selected={radio1 === "NNW"}
                     />
+                    <text x="250" y="20" text-anchor="middle">N</text>
+                    <text x="490" y="260" text-anchor="middle">E</text>
+                    <text x="250" y="490" text-anchor="middle">S</text>
+                    <text x="10" y="260" text-anchor="middle">W</text>
                 </svg>
             </div>
         </div>
@@ -500,7 +505,7 @@
         background-color: black;
         color: rgba(255, 255, 255, 0.5);
         margin: 0;
-        font-size: 4vw;
+        font-size: 6vw;
         line-height: 1.2em;
 
         text-rendering: optimizeLegibility;
