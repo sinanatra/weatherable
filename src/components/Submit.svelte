@@ -555,7 +555,7 @@
 
     textarea,
     input[type="range"] {
-        width: 80%;
+        width: 78%;
         height: 150px;
         font-size: 1em;
         resize: none;
