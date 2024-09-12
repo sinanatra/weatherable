@@ -59,11 +59,12 @@
             }),
         });
         if (response.ok) {
+            alert("Updated");
             return await response.json();
         } else {
+            alert("Failed to update the document.");
             throw new Error("Failed to update the document.");
         }
-        alert("Updated");
     }
 
     const seed = 42;
