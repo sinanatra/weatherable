@@ -21,7 +21,7 @@
 <div class="container">
     <iframe src={pages[currentPage]} frameborder="0"></iframe>
     <div class="next">
-        <h1>Tattoo sessions are between 17-19</h1>
+        <h1>Tattoo sessions are between 19-23</h1>
     </div>
 </div>
 
