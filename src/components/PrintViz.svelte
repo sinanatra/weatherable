@@ -15,9 +15,9 @@
         if (layout === "fullWidth") {
             width = 754;
             height = 91;
-        } else if (layout === "square") {
-            width = 200;
-            height = 200;
+        } else if (layout === "larger") {
+            width = 754;
+            height = 135;
         } else {
             width = 377;
             height = 91;

@@ -182,6 +182,8 @@
                 <select bind:value={$layout}>
                     <option value="default">Default</option>
                     <option value="fullWidth">Full Width</option>
+                    <option value="larger">Larger</option>
+
                 </select>
             </label>
             <button on:click={updateData}>Update</button>
@@ -191,7 +193,7 @@
     <section
         class="data"
         class:full-width={$layout === "fullWidth"}
-        class:square={$layout === "square"}
+        class:larger={$layout === "larger"}
     >
         {#each guessedDataArray as guessedData, index}
             <div class="visualization">
@@ -250,7 +252,12 @@
         width: 100%;
     }
 
-    /* .data:not(.full-width):not(.square) .visualization {
+    
+    .data.larger .visualization {
+        width: 100%;
+    }
+
+    /* .data:not(.full-width):not(.larger) .visualization {
         width: 33.33%;
     } */
 
