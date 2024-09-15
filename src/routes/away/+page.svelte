@@ -22,7 +22,7 @@
     <iframe src={pages[currentPage]} frameborder="0"></iframe>
     <div class="next">
         <h1>Tattoo sessions are between 17-18</h1>
-        <p>Feel free to get a temporary weather data tattoo.</p>
+        <p>Feel free to get a temporary weather data tattoo</p>
     </div>
 </div>
 
