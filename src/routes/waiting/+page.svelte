@@ -10,7 +10,7 @@
 
   let hasRecentDocs = false;
 
-  const checkIntervalMs = 15000; // Check every 15 seconds
+  const checkIntervalMs = 3000; // Check every 15 seconds
   const recentDuration = 20; // N minutes
 
   const pages = [
