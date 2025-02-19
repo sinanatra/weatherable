@@ -1,167 +1,164 @@
 <script>
-    import { onMount } from "svelte";
-    import Viz from "@components/Viz.svelte";
-    import * as d3 from "d3";
+  import { onMount } from "svelte";
+  import Viz from "@components/Viz.svelte";
+  import * as d3 from "d3";
 
-    async function fetchData() {
-        const res = await fetch("/api/last");
-        const json = await res.json();
-        return json;
-    }
+  async function fetchData() {
+    const res = await fetch("/api/last");
+    const json = await res.json();
+    return json;
+  }
 
-    async function fetchRecentData() {
+  async function fetchRecentData() {
+    try {
+      const response = await fetch(
+        "https://zku-middleware.vercel.app/api/recent"
+      );
+
+      if (!response.ok) {
+        throw new Error("API response was not ok");
+      }
+
+      const json = await response.json();
+
+      if (json && json[0]?.batt1 == "OFF") {
         try {
-            const response = await fetch(
-                "https://zku-middleware.vercel.app/api/recent",
-            );
-
-            if (!response.ok) {
-                throw new Error("API response was not ok");
-            }
-
-            const json = await response.json();
-            return json;
-        } catch (error) {
-            console.error("API request failed, falling back to CSV:", error);
-            try {
-                const csvData = await d3.csv(
-                    "/data/zku_weatherstation_main_hour.csv",
-                );
-                return csvData;
-            } catch (csvError) {
-                console.error("Failed to load CSV file as fallback:", csvError);
-                return null;
-            }
+          const csvData = await d3.csv(
+            "/data/zku_weatherstation_main_hour.csv"
+          );
+          return csvData;
+        } catch (csvError) {
+          console.error("Failed to load CSV file as fallback:", csvError);
+          return null;
         }
-    }
-
-    async function fetchWeatherData(date, hour) {
-        const response = await fetch(
-            `https://zku-middleware.vercel.app/api/weather/date/?date=2024-07-18&hour=14:00:00`,
-        );
-        const json = await response.json();
+      } else {
         return json;
+      }
+    } catch (error) {
+      console.error("API request failed, falling back to CSV:", error);
+      try {
+        const csvData = await d3.csv("/data/zku_weatherstation_main_hour.csv");
+        return csvData;
+      } catch (csvError) {
+        console.error("Failed to load CSV file as fallback:", csvError);
+        return null;
+      }
     }
+  }
 
-    const seed = 42;
+  async function fetchWeatherData(date, hour) {
+    const response = await fetch(
+      `https://zku-middleware.vercel.app/api/weather/date/?date=2024-07-18&hour=14:00:00`
+    );
+    const json = await response.json();
+    return json;
+  }
 
-    function seededRandom(seed) {
-        let x = Math.sin(seed) * 10000;
-        return x - Math.floor(x);
-    }
+  const seed = 42;
 
-    function calculateAverage(item) {
-        const ranges = [
-            item.temp,
-            item.uv,
-            item.wrain_piezo,
-            item.humidity,
-            item.windspeed,
-        ];
-        return ranges.reduce((a, b) => a + b, 0) / ranges.length;
-    }
+  function seededRandom(seed) {
+    let x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+  }
 
-    function getClosestNumber(guessedData) {
-        let closestNumber = 1;
+  function calculateAverage(item) {
+    const ranges = [
+      item.temp,
+      item.uv,
+      item.wrain_piezo,
+      item.humidity,
+      item.windspeed,
+    ];
+    return ranges.reduce((a, b) => a + b, 0) / ranges.length;
+  }
 
-        if (guessedData.mirror) closestNumber += 12;
-        if (guessedData.curveSmooth) closestNumber += 6;
-        if (guessedData.outline) closestNumber += 3;
+  function getClosestNumber(guessedData) {
+    let closestNumber = 1;
 
-        const average = calculateAverage(guessedData);
+    if (guessedData.mirror) closestNumber += 12;
+    if (guessedData.curveSmooth) closestNumber += 6;
+    if (guessedData.outline) closestNumber += 3;
 
-        if (average < 0.33) closestNumber += 0;
-        else if (average < 0.66) closestNumber += 1;
-        else closestNumber += 2;
+    const average = calculateAverage(guessedData);
 
-        return closestNumber;
-    }
+    if (average < 0.33) closestNumber += 0;
+    else if (average < 0.66) closestNumber += 1;
+    else closestNumber += 2;
 
-    let data = [];
-    let guessed = [];
-    let guessedData = {};
+    return closestNumber;
+  }
 
-    function updateGuessedData(key, value) {
-        guessedData[key] =
-            key === "curveSmooth" || key === "outline" || key === "mirror"
-                ? value
-                : parseFloat(value);
+  let data = [];
+  let guessed = [];
+  let guessedData = {};
 
-        guessedData.closestNumber = getClosestNumber(guessedData);
-    }
+  function updateGuessedData(key, value) {
+    guessedData[key] =
+      key === "curveSmooth" || key === "outline" || key === "mirror"
+        ? value
+        : parseFloat(value);
 
-    $: if (guessed.length > 0) {
-        const average = calculateAverage(guessed[0]);
-        const seededAverage = seededRandom(seed) * average;
+    guessedData.closestNumber = getClosestNumber(guessedData);
+  }
 
-        guessedData = {
-            temp: guessed[0]?.range,
-            uv: guessed[0]?.range1,
-            wrain_piezo: guessed[0]?.range2,
-            humidity: guessed[0]?.range3,
-            windspeed: guessed[0]?.range4,
+  $: if (guessed.length > 0) {
+    const average = calculateAverage(guessed[0]);
+    const seededAverage = seededRandom(seed) * average;
 
-            len: seededAverage || 0.5,
+    guessedData = {
+      temp: guessed[0]?.range,
+      uv: guessed[0]?.range1,
+      wrain_piezo: guessed[0]?.range2,
+      humidity: guessed[0]?.range3,
+      windspeed: guessed[0]?.range4,
 
-            curveSmooth: [
-                "N",
-                "NNE",
-                "NE",
-                "ENE",
-                "E",
-                "ESE",
-                "SE",
-                "SSE",
-            ].includes(guessed[0]?.radio1),
-            outline: [
-                "S",
-                "SSW",
-                "SW",
-                "WSW",
-                "W",
-                "NW",
-                "WNW",
-                "NNW",
-            ].includes(guessed[0]?.radio1),
-            mirror: guessed[0]?.radio == "Yes",
+      len: seededAverage || 0.5,
 
-            lineThickness: guessed[0]?.lineThickness || 1,
-            fillThickness: guessed[0]?.fillThickness || 0.1,
-        };
-    }
+      curveSmooth: ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE"].includes(
+        guessed[0]?.radio1
+      ),
+      outline: ["S", "SSW", "SW", "WSW", "W", "NW", "WNW", "NNW"].includes(
+        guessed[0]?.radio1
+      ),
+      mirror: guessed[0]?.radio == "Yes",
 
-    onMount(async () => {
-        guessed = await fetchData();
-        // data = await fetchWeatherData();
-        data = await fetchRecentData();
+      lineThickness: guessed[0]?.lineThickness || 1,
+      fillThickness: guessed[0]?.fillThickness || 0.1,
+    };
+  }
 
-        guessedData.closestNumber = getClosestNumber(guessedData);
-    });
+  onMount(async () => {
+    guessed = await fetchData();
+    // data = await fetchWeatherData();
+    data = await fetchRecentData();
 
-    // $: console.log(guessed[0]);
+    guessedData.closestNumber = getClosestNumber(guessedData);
+  });
+
+  // $: console.log(guessed[0]);
 </script>
 
 <article>
-    <div>
-        {#if guessed.length > 0}
-            <section class="data">
-                {#if data.length > 0}
-                    <div>
-                        <Viz {data} {guessedData} invert={true} />
-                    </div>
-                {/if}
-            </section>
-
-            <p>Reach a tattoo operator and wait for your number:</p>
-            <h1>{guessed[0]?.dailyId}</h1>
-            <!-- <h1>{guessedData.closestNumber}</h1> -->
-
-            <p class="again">
-                <a href="/questionnaire">Start again</a>
-            </p>
+  <div>
+    {#if guessed.length > 0}
+      <section class="data">
+        {#if data.length > 0}
+          <div>
+            <Viz {data} {guessedData} invert={true} />
+          </div>
         {/if}
-    </div>
-    <!-- <section class="controls">
+      </section>
+
+      <p>Reach a tattoo operator and wait for your number:</p>
+      <h1>{guessed[0]?.dailyId}</h1>
+      <!-- <h1>{guessedData.closestNumber}</h1> -->
+
+      <p class="again">
+        <a href="/questionnaire">Start again</a>
+      </p>
+    {/if}
+  </div>
+  <!-- <section class="controls">
         <label>
             Temp:
             <input
@@ -292,77 +289,77 @@
 </article>
 
 <style>
-    article {
-        /* height: 100vh; */
-        font-size: 18px;
-        color: white;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        align-content: space-around;
-        justify-content: center;
-    }
+  article {
+    /* height: 100vh; */
+    font-size: 18px;
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: space-around;
+    justify-content: center;
+  }
 
-    div,
-    h1 {
-        color: aliceblue;
-        align-items: center;
-        text-align: center;
-        text-shadow: unset;
-    }
+  div,
+  h1 {
+    color: aliceblue;
+    align-items: center;
+    text-align: center;
+    text-shadow: unset;
+  }
 
-    label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        line-height: 18px;
-    }
+  label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 18px;
+  }
 
-    p {
-        display: block;
-        font-size: 2vw;
-        align-items: center;
-    }
+  p {
+    display: block;
+    font-size: 2vw;
+    align-items: center;
+  }
 
-    .again {
-        margin-top: 100px;
-    }
-    a {
-        color: whitesmoke;
-    }
-    h1 {
-        display: block;
-        font-size: 20vw;
-        align-items: center;
-        color: yellow;
-    }
+  .again {
+    margin-top: 100px;
+  }
+  a {
+    color: whitesmoke;
+  }
+  h1 {
+    display: block;
+    font-size: 20vw;
+    align-items: center;
+    color: yellow;
+  }
 
-    article {
-        font-family:
-            Arial Narrow,
-            Helvetica,
-            sans-serif;
-        background-color: black;
-        color: rgba(255, 255, 255, 0.5);
-        margin: 0;
-        font-size: 6vw;
-        line-height: 1.2em;
+  article {
+    font-family:
+      Arial Narrow,
+      Helvetica,
+      sans-serif;
+    background-color: black;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    font-size: 6vw;
+    line-height: 1.2em;
 
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        -moz-font-smoothing: antialiased;
-        -o-font-smoothing: antialiased;
-    }
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+  }
 
-    :global(h1, h2, h3) {
-        font-weight: normal;
-        margin: 5px;
+  :global(h1, h2, h3) {
+    font-weight: normal;
+    margin: 5px;
 
-        /* background-color: #565656; */
-        /* color: transparent; */
-        text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5);
-        /* -webkit-background-clip: text;
+    /* background-color: #565656; */
+    /* color: transparent; */
+    text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5);
+    /* -webkit-background-clip: text;
         -moz-background-clip: text;
         background-clip: text; */
-    }
+  }
 </style>
